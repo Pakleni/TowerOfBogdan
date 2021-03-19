@@ -1,6 +1,8 @@
-[submodule "frontend"]
-	path = frontend
-	url = https://github.com/Pakleni/TowerOfBogdan-frontend
 [submodule "backend"]
 	path = backend
 	url = https://github.com/Pakleni/TowerOfBogdan-backend
+	branch = main
+[submodule "frontend"]
+	path = frontend
+	url = https://github.com/Pakleni/TowerOfBogdan-frontend
+	branch = main

@@ -37,6 +37,7 @@ export default function Home() {
               </a>
             </Link>
           </div>
+
           <div className="column">
             <Link href="/roulette">
               <a className="media">

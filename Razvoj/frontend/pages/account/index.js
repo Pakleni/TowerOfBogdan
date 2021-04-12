@@ -1,10 +1,13 @@
 // Autor: Ognjen Bjeletic 2018/0447
-import React from "react";
+import React, { useState } from "react";
 import Title from "../../components/title";
 
 import Link from "next/link";
 
 export default function Account() {
+  const [isSuccess, setSuccess] = useState(null);
+  const [isLoading, setLoading] = useState(false);
+
   const button = (
     <div>
       <Link href="/buy/bogdinars">
@@ -75,7 +78,15 @@ export default function Account() {
             {button} <br />
           </div>
           <div>
-            <button className="button">Change Password</button>
+            <button
+              className={`button${isSuccess ? " is-success" : ""}${
+                isLoading ? " is-loading" : ""
+              }`}
+              disabled={isSuccess}
+              onClick={() => setSuccess(true)}
+            >
+              {isSuccess ? "Email successfully sent!" : "Change Password"}
+            </button>
           </div>
           <br />
         </div>

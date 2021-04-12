@@ -73,12 +73,10 @@ function Login() {
                     <form name="loginform" onSubmit={handleSubmit(reg)}>
                       <div className="field">
                         <label htmlFor="email">Email</label>
-                        {emailGood === 1 ? (
+                        {emailGood === 1 && (
                           <label className="has-text-danger">
                             {" <- "}Required field
                           </label>
-                        ) : (
-                          <span />
                         )}
                         <div
                           className={`control has-icons-left${
@@ -118,12 +116,10 @@ function Login() {
                       )}
                       <div className="field">
                         <label htmlFor="password">Password</label>
-                        {passwordGood === 1 ? (
+                        {passwordGood === 1 && (
                           <label className="has-text-danger">
                             {" <- "}Required field
                           </label>
-                        ) : (
-                          <span />
                         )}
                         <div className="control has-icons-left">
                           <span className="icon is-small is-left">

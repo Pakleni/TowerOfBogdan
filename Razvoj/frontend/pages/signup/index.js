@@ -11,6 +11,9 @@ function Register() {
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setSuccess] = useState(null);
   const [errorCode, setErrorCode] = useState(0);
+  const [emailGood, setEmailGood] = useState(0);
+  const [passwordGood, setPasswordGood] = useState(0);
+  const [usernameGood, setUsernameGood] = useState(0);
 
   // "Email Already Exists" => 201;
   // "Username Already Exists" => 202;
@@ -35,6 +38,29 @@ function Register() {
     setIsLoading(false);
   };
 
+  const checkSubmitted = () => {
+    var email = window.document.forms.registerform.email.value;
+    if (email === "") {
+      setEmailGood(1);
+    } else {
+      setEmailGood(0);
+    }
+
+    var password = window.document.forms.registerform.password.value;
+    if (password === "") {
+      setPasswordGood(1);
+    } else {
+      setPasswordGood(0);
+    }
+
+    var username = window.document.forms.registerform.username.value;
+    if (username === "") {
+      setUsernameGood(1);
+    } else {
+      setUsernameGood(0);
+    }
+  };
+
   return (
     <div>
       <Title />
@@ -53,9 +79,14 @@ function Register() {
               <div className="tile is-ancestor">
                 <div className="tile is-parent is-vertical">
                   <div className="tile is-child is-4">
-                    <form onSubmit={handleSubmit(reg)}>
+                    <form name="registerform" onSubmit={handleSubmit(reg)}>
                       <div className="field">
                         <label htmlFor="email">Email</label>
+                        {emailGood === 1 && (
+                          <label className="has-text-danger">
+                            {" <- "}Required field
+                          </label>
+                        )}
                         <div
                           className={`control has-icons-left${
                             errorCode === 201 ? " has-icons-right" : ""
@@ -102,6 +133,11 @@ function Register() {
                       </div>
                       <div className="field">
                         <label htmlFor="username">Username</label>
+                        {usernameGood === 1 && (
+                          <label className="has-text-danger">
+                            {" <- "}Required field
+                          </label>
+                        )}
                         <div
                           className={`control has-icons-left${
                             errorCode === 202 ? " has-icons-right" : ""
@@ -140,6 +176,11 @@ function Register() {
                       )}
                       <div className="field">
                         <label htmlFor="password">Password</label>
+                        {passwordGood === 1 && (
+                          <label className="has-text-danger">
+                            {" <- "}Required field
+                          </label>
+                        )}
                         <div className="control has-icons-left">
                           <span className="icon is-small is-left">
                             <FontAwesomeIcon icon="unlock-alt"></FontAwesomeIcon>
@@ -161,6 +202,7 @@ function Register() {
                           }`}
                           type="submit"
                           disabled={isSuccess !== null}
+                          onClick={() => checkSubmitted()}
                         >
                           Submit
                         </button>

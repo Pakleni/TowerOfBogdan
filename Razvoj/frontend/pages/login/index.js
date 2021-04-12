@@ -11,10 +11,28 @@ function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setSuccess] = useState(null);
   const [errorCode, setErrorCode] = useState(0);
+  const [emailGood, setEmailGood] = useState(0);
+  const [passwordGood, setPasswordGood] = useState(0);
 
-  // "Username Doesnt Exist" => 202;
+  // "Email Doesnt Exist" => 202;
   // "Account was not succesfully created" => 203;
   // "Account was succesfully created" => 204;
+
+  const checkSubmitted = () => {
+    var email = window.document.forms.loginform.email.value;
+    if (email === "") {
+      setEmailGood(1);
+    } else {
+      setEmailGood(0);
+    }
+
+    var password = window.document.forms.loginform.password.value;
+    if (password === "") {
+      setPasswordGood(1);
+    } else {
+      setPasswordGood(0);
+    }
+  };
 
   const reg = async (data) => {
     try {
@@ -52,16 +70,23 @@ function Login() {
               <div className="tile is-ancestor">
                 <div className="tile is-parent is-vertical">
                   <div className="tile is-child is-4">
-                    <form onSubmit={handleSubmit(reg)}>
+                    <form name="loginform" onSubmit={handleSubmit(reg)}>
                       <div className="field">
-                        <label htmlFor="username">Username</label>
+                        <label htmlFor="email">Email</label>
+                        {emailGood === 1 ? (
+                          <label className="has-text-danger">
+                            {" <- "}Required field
+                          </label>
+                        ) : (
+                          <span />
+                        )}
                         <div
                           className={`control has-icons-left${
                             errorCode === 202 ? " has-icons-right" : ""
                           }`}
                         >
                           <span className="icon is-small is-left">
-                            <FontAwesomeIcon icon="user"></FontAwesomeIcon>
+                            <FontAwesomeIcon icon="envelope"></FontAwesomeIcon>
                           </span>
                           {errorCode === 202 ? (
                             <span className="icon is-small is-right">
@@ -74,9 +99,9 @@ function Login() {
                             className={`input${
                               errorCode === 202 ? " is-danger" : ""
                             }`}
-                            type="text"
-                            id="username"
-                            name="username"
+                            type="email"
+                            id="email"
+                            name="email"
                             ref={register({ required: true })}
                             disabled={isSuccess !== null}
                           />
@@ -85,7 +110,7 @@ function Login() {
                       {errorCode === 202 ? (
                         <div className="notification is-danger">
                           <p>
-                            Username doesn&apos;t <b>exist</b>.
+                            Email doesn&apos;t <b>exist</b>.
                           </p>
                         </div>
                       ) : (
@@ -93,6 +118,13 @@ function Login() {
                       )}
                       <div className="field">
                         <label htmlFor="password">Password</label>
+                        {passwordGood === 1 ? (
+                          <label className="has-text-danger">
+                            {" <- "}Required field
+                          </label>
+                        ) : (
+                          <span />
+                        )}
                         <div className="control has-icons-left">
                           <span className="icon is-small is-left">
                             <FontAwesomeIcon icon="unlock-alt"></FontAwesomeIcon>
@@ -126,6 +158,7 @@ function Login() {
                           }`}
                           type="submit"
                           disabled={isSuccess !== null}
+                          onClick={() => checkSubmitted()}
                         >
                           Submit
                         </button>

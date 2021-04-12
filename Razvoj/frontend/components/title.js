@@ -10,7 +10,7 @@ Title.propTypes = {
 export default function Title({ title }) {
   let chosenTitle = "Tower Of Bogdan";
 
-  if (title) chosenTitle = title;
+  if (title) chosenTitle = title + " | " + chosenTitle;
 
   return (
     <Head>

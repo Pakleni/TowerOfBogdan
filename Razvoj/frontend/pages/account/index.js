@@ -2,13 +2,19 @@
 import React from "react";
 import Title from "../../components/title";
 
+import Link from "next/link";
+
 export default function Account() {
   const button = (
     <div>
-      <button className="button is-warning">Buy Bogdinars</button>
+      <Link href="/buy/bogdinars">
+        <button className="button is-warning">Buy Bogdinars</button>
+      </Link>
       <br />
       <br />
-      <button className="button is-info">Upgrade to VIP</button>
+      <Link href="/buy/vip">
+        <button className="button is-info">Upgrade to VIP</button>
+      </Link>
       <br />
       <br />
       <button className="button button is-primary is-light">{`Ascend [${1000}β]`}</button>

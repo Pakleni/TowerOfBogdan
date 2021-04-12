@@ -21,9 +21,11 @@ export default function Game({ title, src }) {
             <h2 className="subtitle is-3-5">{title}</h2>
           </div>
           <div className="media-right">
-            <button className="button is-warning title is-3-5">
-              Buy Bogdinars
-            </button>
+            <Link href="/buy/bogdinars">
+              <button className="button is-warning title is-3-5">
+                Buy Bogdinars
+              </button>
+            </Link>
             <br />
           </div>
         </article>

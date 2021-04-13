@@ -19,15 +19,24 @@ var wheel;
 var betBox;
 var table;
 
+var err;
+var balance;
+
 function setZoneClick(chipZone) {
     chipZone.zone.on('pointerdown', function (pointer) {
         if (pointer.rightButtonDown()) {
-            if (chipZone.getVisible() === true)
-                chipZone.setVisible(false);
+            chipZone.clear();
         }
-        else if (chipZone.getVisible() === false) {
-            chipZone.chip.setValue(betBox.getText());
-            chipZone.setVisible(true);
+        else if (pointer.leftButtonDown() && chipZone.getVisible() === false) {
+            var checkVal = chipZone.chip.setValue(betBox.getText());
+            if (checkVal !== true) {
+                err.setText(checkVal);
+                err.setVisible(true);
+            }
+            else {
+                chipZone.setVisible(true);
+                err.setVisible(false);
+            }
         }
     });
 }
@@ -44,7 +53,14 @@ class ChipZone {
 
         this.getVisible = function () { return this.chip.getVisible(); };
         this.setVisible = function (visible) { this.chip.setVisible(visible); };
-
+        this.clear = function () {
+            if (this.getVisible() === true) {
+                balance.incBalance(this.getValue());
+                this.setVisible(false);
+                err.setVisible(false);
+            }
+        }
+        this.getValue = function () { return this.chip.val; }
         this.setValue = function (newVal) { this.chip.setValue(newVal); };
     }
 }
@@ -79,7 +95,11 @@ class Table {
         this.chipZones.push(new ChipZone(owner, x + 227, y + 108, 110, 79, '19_to_36'));
 
         this.clearZones = function () {
-            this.chipZones.forEach(element => element.setVisible(false));
+            this.chipZones.forEach(element => element.clear());
+        }
+
+        this.getZonesWithBets = function () {
+            return this.chipZones.filter(element => element.getVisible());
         }
     }
 }
@@ -91,11 +111,8 @@ class Chip {
         this.text = owner.add.text(x, y, '0 β', { fontSize: '12px', fontFamily: "Arial Black", fill: '#ffffff' }).setOrigin(0.5, 0.5);
 
         this.setValue = function (newVal) {
-            if (isNaN(newVal)) {
-                this.val = 0n;
-                this.text.setText("?");
-            }
-            else {
+            var checkVal = balance.decBalance(newVal);
+            if (checkVal === true) {
                 this.val = BigInt(newVal);
 
                 var valString;
@@ -112,6 +129,7 @@ class Chip {
 
                 this.text.setText(valString + ' β');
             }
+            return checkVal;
         }
 
         this.getVisible = function () { return this.bg.visible; }
@@ -135,13 +153,22 @@ function create() {
 
     wheel = this.add.image(WIDTH / 5.5, HEIGHT / 2.5, 'wheel').setScale(0.5);
     table = new Table(this, WIDTH / 3 * 2, HEIGHT / 2.5);
-    var balance = new BalanceText(this, WIDTH, 16);
-
+    balance = new BalanceText(this, WIDTH, 16);
+    balance.setBalance(1_000_000_000n);
     var helpText = this.add.text(60, HEIGHT - 120, "Place your bet by entering the amount and clicking on the layout:", { fontSize: '22px', fontFamily: "Arial Black", fill: '#ffffff' }).setOrigin(0, 0.5);
     betBox = new TextBox(this, 460, HEIGHT - 57);
 
-    var clearBut = new Button(this, WIDTH - 240, HEIGHT - 50, "Clear", function () { table.clearZones(); });
-    var playBut = new Button(this, WIDTH - 240, HEIGHT - 120, "Play", function () { });
+    var clearBut = new Button(this, WIDTH - 240, HEIGHT - 50, "Clear", function () { table.clearZones(); err.setVisible(false); });
+    var playBut = new Button(this, WIDTH - 240, HEIGHT - 120, "Play", function () {
+        if (table.getZonesWithBets().length == 0) {
+            err.setText("You must place a bet on the table.");
+            err.setVisible(true);
+        }
+        else err.setVisible(false);
+    });
+
+    err = new ErrorMsg(this, 640, 85, "Sample Text");
+    err.setVisible(false);
 }
 
 function update() {

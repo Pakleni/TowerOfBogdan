@@ -42,15 +42,82 @@ class Button {
     }
 }
 
+function setErrorMsgClose(msg) {
+    msg.closeButton.on('pointerover', function () {
+        msg.closeButton.setTint(defaultHoverTint);
+    });
+    msg.closeButton.on('pointerout', function () {
+        msg.closeButton.setTint(defaultNormalTint);
+    });
+    msg.closeButton.on('pointerdown', function (pointer) {
+        msg.closeButton.setTint(defaultNormalTint);
+        msg.setVisible(false);
+    });
+}
+
+class ErrorMsg {
+    constructor(owner, x, y, text) {
+        this.bg = owner.add.image(x, y, 'errormsg');
+        this.text = owner.add.text(x, y - 25, text, { fontSize: '24px', fontFamily: "Arial Black", fill: '#FFFFFF' }).setOrigin(0.5, 0.5);
+
+        this.closeButton = owner.add.image(x + 375, y - 50, 'closebutton').setTint(defaultNormalTint).setInteractive();
+       
+        setErrorMsgClose(this);
+
+        this.setVisible = function (visible) {
+            this.bg.setVisible(visible);
+            this.text.setVisible(visible);
+            this.closeButton.setVisible(visible);
+        }
+
+        this.setText = function (newText) {
+            this.text.setText(newText);
+        }
+    }
+}
+
 class BalanceText {
     constructor(owner, x, y) {
-        this.balance = 0;
+        this.balance = 0n;
         this.text = owner.add.text(x, y, 'Balance: ' + this.balance + ' β', { fontSize: '32px', fontFamily: "Arial Black", fill: '#FFD700' }).setOrigin(1.0, 0.5);
 
         this.setBalance = function (newBalance) {
-            this.balance = newBalance;
-            this.text.setText('Balance: ' + newBalance + ' β');
+            newBalance = String(newBalance);
+            if (isNaN(newBalance))
+                return "Invalid input, please enter a number.";
+            
+            this.balance = BigInt(newBalance);
+            this.text.setText('Balance: ' + this.balance + ' β');
+            return true;
         };
+
+        this.isPossibleBet = function (amount) {
+            amount = String(amount);
+            if (isNaN(amount))
+                return "Invalid input, please enter a number.";
+            amount = BigInt(amount);
+            if (amount == 0)
+                return "Bet amount can't be zero."
+            if (amount > this.balance)
+                return "You don't have enough Bogdinars."
+            return true;
+        }
+
+        this.decBalance = function (amount) {
+            var retVal = this.isPossibleBet(amount);
+            if(retVal === true)
+                this.setBalance(this.balance - BigInt(amount));
+            return retVal;
+        }
+
+        this.incBalance = function (amount) {
+            amount = String(amount);
+            if (isNaN(amount))
+                return "Invalid input, please enter a number.";
+            
+            this.setBalance(this.balance + BigInt(amount));
+            return true;
+        }
     }
 }
 
@@ -83,4 +150,6 @@ class TextBox {
 function loadCoreSprites(game) {
     game.load.image('button', 'sprites/button.png');
     game.load.image('textbox', 'sprites/textbox.png');
+    game.load.image('errormsg', 'sprites/errorMsg.png');
+    game.load.image('closebutton', 'sprites/closeButton.png')
 }

@@ -15,6 +15,11 @@ var config = {
     }
 };
 
+var balance;
+var err;
+var box;
+var playButton;
+
 function preload() {
     loadCoreSprites(this);
     this.load.image('card', 'sprites/card-small.png');
@@ -24,12 +29,26 @@ function create() {
     for (var i = 0; i < 5; i++)
         this.add.image(110 - i * 2, 150 - i * 2, 'card').setScale(0.75);
     
-    var playButton = new Button(this, WIDTH / 2, 520, 'Play', function () { });
-    var balance = new BalanceText(this, WIDTH, 16);
-
+    balance = new BalanceText(this, WIDTH, 16);
+    balance.setBalance(100n);
     var bet = this.add.text(WIDTH / 2, 320, "Place your bet:", { fontSize: '32px', fontFamily: "Arial Black", fill: '#ffffff' }).setOrigin(0.5, 0.5);
 
-    var box = new TextBox(this, WIDTH / 2, 400);
+    box = new TextBox(this, WIDTH / 2, 400);
+
+    playButton = new Button(this, WIDTH / 2, 520, 'Play', function () {
+        var checkBal = balance.isPossibleBet(box.getText());
+        if (checkBal !== true) {
+            err.setText(checkBal);
+            err.setVisible(true);
+        }
+        else {
+            err.setVisible(false);
+        }
+    });
+
+
+    err = new ErrorMsg(this, 640, 85, "Sample Text");
+    err.setVisible(false);
 }
 
 function update() {

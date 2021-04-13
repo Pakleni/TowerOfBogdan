@@ -15,6 +15,10 @@ var config = {
     }
 };
 
+var balance;
+var box;
+var err;
+
 function preload() {
     loadCoreSprites(this);
     this.load.image('slot', 'sprites/slot-screen-fruit.png');
@@ -23,12 +27,24 @@ function preload() {
 function create() {
     this.add.image(WIDTH / 2, HEIGHT / 2.5, 'slot');
 
-    var balance = new BalanceText(this, WIDTH, 16);
+    balance = new BalanceText(this, WIDTH, 16);
+    balance.setBalance(100n);
     
     var betText = this.add.text(60, HEIGHT - 120, "Place your bet:", { fontSize: '22px', fontFamily: "Arial Black", fill: '#ffffff' }).setOrigin(0, 0.5);
-    var betBox = new TextBox(this, 460, HEIGHT - 57);
-    var playBut = new Button(this, WIDTH - 240, HEIGHT - 58, "Play", function () { });
-
+    box = new TextBox(this, 460, HEIGHT - 57);
+    var playBut = new Button(this, WIDTH - 240, HEIGHT - 58, "Play", function () {
+        var checkBal = balance.isPossibleBet(box.getText());
+        if (checkBal !== true) {
+            err.setText(checkBal);
+            err.setVisible(true);
+        }
+        else {
+            err.setVisible(false);
+        }
+    });
+   
+    err = new ErrorMsg(this, 640, 85, "Sample Text");
+    err.setVisible(false);
 }
 
 function update() {

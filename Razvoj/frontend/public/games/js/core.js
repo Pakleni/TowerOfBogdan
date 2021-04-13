@@ -61,7 +61,7 @@ class ErrorMsg {
         this.text = owner.add.text(x, y - 25, text, { fontSize: '24px', fontFamily: "Arial Black", fill: '#FFFFFF' }).setOrigin(0.5, 0.5);
 
         this.closeButton = owner.add.image(x + 375, y - 50, 'closebutton').setTint(defaultNormalTint).setInteractive();
-       
+
         setErrorMsgClose(this);
 
         this.setVisible = function (visible) {
@@ -82,18 +82,20 @@ class BalanceText {
         this.text = owner.add.text(x, y, 'Balance: ' + this.balance + ' β', { fontSize: '32px', fontFamily: "Arial Black", fill: '#FFD700' }).setOrigin(1.0, 0.5);
 
         this.setBalance = function (newBalance) {
-            newBalance = String(newBalance);
-            if (isNaN(newBalance))
+            if (!this.isValidAmount(newBalance))
                 return "Invalid input, please enter a number.";
-            
+
             this.balance = BigInt(newBalance);
             this.text.setText('Balance: ' + this.balance + ' β');
             return true;
         };
 
+        this.isValidAmount = function (amount) {
+            return /^[0-9]+$/.test(String(amount));
+        }
+
         this.isPossibleBet = function (amount) {
-            amount = String(amount);
-            if (isNaN(amount))
+            if (!this.isValidAmount(amount))
                 return "Invalid input, please enter a number.";
             amount = BigInt(amount);
             if (amount == 0)
@@ -105,16 +107,15 @@ class BalanceText {
 
         this.decBalance = function (amount) {
             var retVal = this.isPossibleBet(amount);
-            if(retVal === true)
+            if (retVal === true)
                 this.setBalance(this.balance - BigInt(amount));
             return retVal;
         }
 
         this.incBalance = function (amount) {
-            amount = String(amount);
-            if (isNaN(amount))
+            if (!this.isValidAmount(amount))
                 return "Invalid input, please enter a number.";
-            
+
             this.setBalance(this.balance + BigInt(amount));
             return true;
         }

@@ -9,7 +9,7 @@
         exit();
     }
 
-    if(!isset($_REQUEST["bet"]) || !is_int($_REQUEST["bet"]) || $_REQUEST["bet"] <= 0)
+    if(!isset($_REQUEST["bet"]) || !checkIfInt($_REQUEST["bet"]) || $_REQUEST["bet"] <= 0)
     {
         http_response_code(400);
         exit();

@@ -10,4 +10,8 @@
         return isset($_REQUEST["bet"]);
     }
 
+    function checkIfInt( $arg ){
+        return is_numeric($arg) && is_int(+$arg);
+      }
+
 ?>

@@ -1,4 +1,5 @@
 <?php
+    //Radio Nemanja Mehovic 2018/0452
     require_once "../validations.php";
     require_once "../Games/Slots.php";
 
@@ -8,9 +9,15 @@
         exit();
     }
 
-    if(!betAmmountInRange())
+    if(!isset($_REQUEST["bet"]) || !is_int($_REQUEST["bet"]) || $_REQUEST["bet"] <= 0)
     {
         http_response_code(400);
+        exit();
+    }
+
+    if(!betAmmountInRange())
+    {
+        http_response_code(403);
         exit();
     }
 

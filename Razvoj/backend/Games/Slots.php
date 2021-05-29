@@ -1,4 +1,5 @@
 <?php
+    //Radio Nemanja Mehovic 2018/0452
     //all symbols in their respactive categories
     define("basicSymbols", ["Cherry", "Lemon", "Eggplant", "Grapes", "Banana"]);
     define("eliteSymbols", ["Seven", "Diamond", "Egg", "Treasure"]);

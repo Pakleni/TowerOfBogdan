@@ -3,30 +3,40 @@
     require_once "../validations.php";
     require_once "../Games/Slots.php";
 
-    if(!auth())
+    header("Access-Control-Allow-Origin:*");
+    header("Access-Control-Allow-Methods:POST");
+    header("Content-Type:application/json");
+    header("Access-Control-Allow-Headers:Access-Control-Allow-Headers,Content-Type,Access-Control-Allow-Methods,Authorization,X-Requested-With");
+
+    if($_SERVER["REQUEST_METHOD"] != "POST")
     {
-        http_response_code(401);
+        http_response_code(400);
         exit();
     }
+
+    auth();
 
     if(!isset($_REQUEST["bet"]) || !checkIfInt($_REQUEST["bet"]) || $_REQUEST["bet"] <= 0)
     {
         http_response_code(400);
         exit();
     }
+    
+    betAmmountInRange($_REQUEST["bet"]);
 
-    if(!betAmmountInRange())
+    try
     {
-        http_response_code(403);
+        $game = new Slots();
+        $reward = $game->getReward($_REQUEST["bet"]);
+        $generatedSymbols = $game->getSymbols();
+
+        $answer = array($reward, $generatedSymbols);
+
+        echo json_encode($answer);
+    }
+    catch(Exception $e)
+    {
+        http_response_code(500);
         exit();
     }
-
-
-    $game = new Slots();
-    $reward = $game->getReward($_REQUEST["bet"]);
-    $generatedSymbols = $game->getSymbols();
-
-    $answer = array($reward, $generatedSymbols);
-
-    echo json_encode($answer);
 ?>

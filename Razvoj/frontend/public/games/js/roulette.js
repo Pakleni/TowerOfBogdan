@@ -15,12 +15,30 @@ var config = {
     }
 };
 
+var numberPositions = [24, 4, 23, 0, 19, 34, 15, 30, 11, 26, 7, 29, 10, 3, 22, 37, 18, 33, 14, 12, 31, 16, 35, 20, 1, 8, 27, 6, 25, 9, 28, 13, 32, 17, 36, 21, 2, 5];
+
 var wheel;
+var ball;
 var betBox;
 var table;
-
 var err;
 var balance;
+
+var wheelX = WIDTH / 5.5;
+var wheelY = HEIGHT / 2.5;
+var wheelHolesRadius = 153;
+var wheelOuterRadius = 203;
+
+var wheelSpeed = 0.075;
+var ballSpeed = 0.1;
+var ballDownSpeed = 15;
+
+var chosenField = Math.floor(Math.random() * numberPositions.length);
+var minAngleTreshold = 2 * Math.PI / 38 * 8;
+var maxAngleTreshold = 2 * Math.PI / 38 * 16;
+
+var numOfLaps = 4;
+var decceleration = 0.0002;
 
 function setZoneClick(chipZone) {
     chipZone.zone.on('pointerdown', function (pointer) {
@@ -141,9 +159,138 @@ class Chip {
     }
 }
 
+class Wheel {
+    constructor(owner) {
+        this.wheel = owner.add.image(wheelX, wheelY, 'wheel').setScale(0.5);
+        this.ball = null;
+        this.spun = false;
+        this.moving = false;
+        this.angle = 0;
+        this.angularSpeed = 0;
+        this.decceleration = 0;
+    }
+    setBall(ball) {
+        this.ball = ball;
+    }
+    spin() {
+        if (!this.spun) {
+            this.spun = true;
+
+
+            //TODO prebaci u startMove()
+            this.moving = true;
+            this.angularSpeed = wheelSpeed;
+            this.decceleration = 0;
+            this.ball.startMove();
+        }
+    }
+    move() {
+        if (this.moving) {
+            this.angle += this.angularSpeed;
+            if (this.angle >= 2 * Math.PI)
+                this.angle -= 2 * Math.PI;
+
+            this.wheel.rotation = this.angle;
+            this.ball.move();
+
+            this.angularSpeed -= this.decceleration;
+            if (this.angularSpeed <= 0) {
+                this.angularSpeed = 0;
+                this.moving = false;
+                this.spun = false;//TODO premesti
+            }
+        }
+    }
+    startDecceleration() {
+        this.decceleration = decceleration;
+    }
+}
+
+class Ball {
+    constructor(owner, wheel) {
+        this.wheel = wheel;
+        this.ball = owner.add.circle(wheelX + wheelOuterRadius, -100, 7, 0xFFFFFF);
+        this.moving = false;
+        this.onWheel = false;
+
+        this.radius = wheelOuterRadius;
+        this.angle = 0;
+        this.angularSpeed = 0;
+        this.linearSpeed = 0;
+        this.lapsPassed = 0;
+        this.decceleration = 0;
+    }
+    startMove() {
+        this.moving = true;
+        this.onWheel = false;
+
+        this.ball.x = wheelX + wheelOuterRadius;
+        this.ball.y = -100;
+        this.angle = 0;
+        this.radius = wheelOuterRadius;
+        this.angularSpeed = 0;
+        this.linearSpeed = ballDownSpeed;
+        this.lapsPassed = 0;
+        this.decceleration = 0;
+    }
+    move() {
+        if (this.moving) {
+            if (!this.onWheel) {
+                this.ball.y += this.linearSpeed;
+                if (this.ball.y >= wheelY) {
+                    this.ball.y = wheelY;
+                    this.onWheel = true;
+                    this.linearSpeed = 0;
+                    this.angularSpeed = ballSpeed;
+                }
+            }
+            else {
+                this.angle += this.angularSpeed;
+                if (this.angle >= 2 * Math.PI) {
+                    this.angle -= 2 * Math.PI;
+                    ++this.lapsPassed;
+                }
+
+                let targetAngle = this.wheel.angle + (2 * Math.PI / 38 * numberPositions[chosenField]);
+                if (this.linearSpeed == 0) {
+                    if (this.lapsPassed >= numOfLaps) {
+                        if (targetAngle >= 2 * Math.PI)
+                            targetAngle -= 2 * Math.PI;
+
+                        if (this.angle + minAngleTreshold <= targetAngle && this.angle + maxAngleTreshold >= targetAngle) {
+                            this.linearSpeed = (wheelOuterRadius - wheelHolesRadius) / ((targetAngle - this.angle) / (this.angularSpeed - this.wheel.angularSpeed));
+                        }
+
+                    }
+                }
+                else {
+                    this.radius -= this.linearSpeed;
+                    if (this.radius - wheelHolesRadius < 0.5) {
+                        this.radius = wheelHolesRadius;
+                        this.angularSpeed = this.wheel.angularSpeed;
+                        this.angle = targetAngle;
+                        this.linearSpeed = 0;
+                        this.decceleration = decceleration;
+                        this.wheel.startDecceleration();
+                    }
+                }
+
+                this.ball.x = wheelX + this.radius * Math.cos(this.angle);
+                this.ball.y = wheelY + this.radius * Math.sin(this.angle);
+
+                this.angularSpeed -= this.decceleration;
+                if (this.angularSpeed <= 0) {
+                    this.angularSpeed = 0;
+                    this.moving = false;
+                }
+            }
+        }
+    }
+}
+
 function preload() {
     loadCoreSprites(this);
-    this.load.image('wheel', 'sprites/roulette-wheel.png');
+    this.load.image('wheel', 'sprites/roulette-wheel-fat-rotated.png');
     this.load.image('table', 'sprites/roulette-table-text.png');
     this.load.image('chip', 'sprites/chip.png');
 }
@@ -151,7 +298,10 @@ function preload() {
 function create() {
     this.input.mouse.disableContextMenu();
 
-    wheel = this.add.image(WIDTH / 5.5, HEIGHT / 2.5, 'wheel').setScale(0.5);
+    wheel = new Wheel(this);
+    ball = new Ball(this, wheel);
+    wheel.setBall(ball);
+
     table = new Table(this, WIDTH / 3 * 2, HEIGHT / 2.5);
     balance = new BalanceText(this, WIDTH, 16);
     balance.setBalance(1_000_000_000n);
@@ -164,15 +314,19 @@ function create() {
             err.setText("You must place a bet on the table.");
             err.setVisible(true);
         }
-        else err.setVisible(false);
+        else {
+            err.setVisible(false)
+            wheel.spin();
+        };
     });
 
     err = new ErrorMsg(this, 640, 85, "Sample Text");
     err.setVisible(false);
+
 }
 
 function update() {
-    wheel.rotation += 0.001;
+    wheel.move();
 }
 
 var game = new Phaser.Game(config);

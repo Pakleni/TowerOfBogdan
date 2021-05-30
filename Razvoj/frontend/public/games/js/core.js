@@ -1,11 +1,13 @@
 // Autor: Aleksandar Dincic 2018/0028
 
+var reqUrl = "";
+
 var defaultNormalTint = 0xb5a8a8;
 var defaultHoverTint = 0xdad3d3;
 var defaultClickTint = 0x968585;
 
 var defaultTextColor = '#ffffff';
-
+var defaultRewardColor = '#FFD700';
 function setButtonHover(button) {
     button.bg.on('pointerover', function () {
         button.bg.setTint(button.hoverTint);
@@ -58,7 +60,7 @@ function setErrorMsgClose(msg) {
 class ErrorMsg {
     constructor(owner, x, y, text) {
         this.bg = owner.add.image(x, y, 'errormsg');
-        this.text = owner.add.text(x, y - 25, text, { fontSize: '24px', fontFamily: "Arial Black", fill: '#FFFFFF' }).setOrigin(0.5, 0.5);
+        this.text = owner.add.text(x, y - 25, text, { fontSize: '24px', fontFamily: "Arial Black", fill: defaultTextColor }).setOrigin(0.5, 0.5);
 
         this.closeButton = owner.add.image(x + 375, y - 50, 'closebutton').setTint(defaultNormalTint).setInteractive();
 
@@ -79,7 +81,7 @@ class ErrorMsg {
 class BalanceText {
     constructor(owner, x, y) {
         this.balance = 0n;
-        this.text = owner.add.text(x, y, 'Balance: ' + this.balance + ' β', { fontSize: '32px', fontFamily: "Arial Black", fill: '#FFD700' }).setOrigin(1.0, 0.5);
+        this.text = owner.add.text(x, y, 'Balance: ' + this.balance + ' β', { fontSize: '32px', fontFamily: "Arial Black", fill: defaultRewardColor }).setOrigin(1.0, 0.5);
 
         this.setBalance = function (newBalance) {
             if (!this.isValidAmount(newBalance))

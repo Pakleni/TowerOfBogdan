@@ -23,6 +23,9 @@ var betBox;
 var table;
 var err;
 var balance;
+var totalBetText;
+var rewardAmountText;
+var totalBetAmmount = 0;
 
 var wheelX = WIDTH / 5.5;
 var wheelY = HEIGHT / 2.5;
@@ -73,7 +76,7 @@ class ChipZone {
         this.setVisible = function (visible) { this.chip.setVisible(visible); };
         this.clear = function () {
             if (this.getVisible() === true) {
-                balance.incBalance(this.getValue());
+                totalBetText.decBalance(this.getValue());
                 this.setVisible(false);
                 err.setVisible(false);
             }
@@ -98,19 +101,19 @@ class Table {
         }
 
         for (var i = 0; i < 3; i++) {
-            this.chipZones.push(new ChipZone(owner, x + 343, y - 38 - i * 75, 49, 75, '2_to_1_' + (i + 1)));
+            this.chipZones.push(new ChipZone(owner, x + 343, y - 38 - i * 75, 49, 75, 'col' + (i + 1)));
         }
 
-        this.chipZones.push(new ChipZone(owner, x - 323, y + 37, 220, 71, '1st_12'));
-        this.chipZones.push(new ChipZone(owner, x - 103, y + 37, 220, 71, '2nd_12'));
-        this.chipZones.push(new ChipZone(owner, x + 117, y + 37, 220, 71, '3rd_12'));
+        this.chipZones.push(new ChipZone(owner, x - 323, y + 37, 220, 71, '1st12'));
+        this.chipZones.push(new ChipZone(owner, x - 103, y + 37, 220, 71, '2nd12'));
+        this.chipZones.push(new ChipZone(owner, x + 117, y + 37, 220, 71, '3rd12'));
 
-        this.chipZones.push(new ChipZone(owner, x - 323, y + 108, 110, 79, '1_to_18'));
+        this.chipZones.push(new ChipZone(owner, x - 323, y + 108, 110, 79, '1to18'));
         this.chipZones.push(new ChipZone(owner, x - 213, y + 108, 110, 79, 'even'));
         this.chipZones.push(new ChipZone(owner, x - 103, y + 108, 110, 79, 'red'));
         this.chipZones.push(new ChipZone(owner, x + 7, y + 108, 110, 79, 'black'));
         this.chipZones.push(new ChipZone(owner, x + 117, y + 108, 110, 79, 'odd'));
-        this.chipZones.push(new ChipZone(owner, x + 227, y + 108, 110, 79, '19_to_36'));
+        this.chipZones.push(new ChipZone(owner, x + 227, y + 108, 110, 79, '19to36'));
 
         this.clearZones = function () {
             this.chipZones.forEach(element => element.clear());
@@ -129,7 +132,7 @@ class Chip {
         this.text = owner.add.text(x, y, '0 β', { fontSize: '12px', fontFamily: "Arial Black", fill: '#ffffff' }).setOrigin(0.5, 0.5);
 
         this.setValue = function (newVal) {
-            var checkVal = balance.decBalance(newVal);
+            var checkVal = totalBetText.incBalance(newVal);
             if (checkVal === true) {
                 this.val = BigInt(newVal);
 
@@ -159,6 +162,52 @@ class Chip {
     }
 }
 
+function getRoulette() {
+    let betsData = [];
+    let selectedFields = table.getZonesWithBets();
+    selectedFields.forEach(e => {
+        let fieldObj = {
+            field: e.name,
+            bet: e.getValue().toString()
+        };
+        betsData.push(fieldObj);
+    });
+
+    let bets = JSON.stringify({
+        bets: betsData
+    });
+
+    $.ajax({
+        method: "POST",
+        url: reqUrl + "REST/getRoulette.php",
+        dataType: "text",
+        headers: {
+            "Authorization": "Basic " + btoa("username:password")
+        },
+        data: bets,
+        success: function (data, status, xhr) {
+            let json = JSON.parse(data);
+            rewardAmountText.setVisible(false);
+            rewardAmountText.setBalance(json[0]);
+            chosenField = json[1];
+            err.setVisible(false);
+            wheel.startMove();
+        },
+        error: function (data, status, xhr) {
+            err.setText("Something seems wrong, please try again.");
+            err.setVisible(true);
+            wheel.spun = false;
+        }
+    });
+}
+
+function showRewardAmount() {
+    if (rewardAmountText.balance == 0)
+        return;
+    balance.incBalance(rewardAmountText.balance);
+    rewardAmountText.setVisible(true);
+}
+
 class Wheel {
     constructor(owner) {
         this.wheel = owner.add.image(wheelX, wheelY, 'wheel').setScale(0.5);
@@ -172,16 +221,23 @@ class Wheel {
     setBall(ball) {
         this.ball = ball;
     }
+    startMove() {
+        this.moving = true;
+        this.angularSpeed = wheelSpeed;
+        this.decceleration = 0;
+        this.ball.startMove();
+    }
     spin() {
         if (!this.spun) {
-            this.spun = true;
-
-
-            //TODO prebaci u startMove()
-            this.moving = true;
-            this.angularSpeed = wheelSpeed;
-            this.decceleration = 0;
-            this.ball.startMove();
+            let checkBal = balance.isPossibleBet(totalBetText.balance);
+            if (checkBal !== true) {
+                err.setText(checkBal);
+                err.setVisible(true);
+            }
+            else {
+                this.spun = true;
+                getRoulette();
+            }
         }
     }
     move() {
@@ -197,7 +253,8 @@ class Wheel {
             if (this.angularSpeed <= 0) {
                 this.angularSpeed = 0;
                 this.moving = false;
-                this.spun = false;//TODO premesti
+                this.spun = false;
+                showRewardAmount();
             }
         }
     }
@@ -303,26 +360,21 @@ function create() {
     wheel.setBall(ball);
 
     table = new Table(this, WIDTH / 3 * 2, HEIGHT / 2.5);
-    balance = new BalanceText(this, WIDTH, 16);
+    balance = new BalanceText(this, WIDTH, 16, "Balance: ");
     balance.setBalance(1_000_000_000n);
+    rewardAmountText = new BalanceText(this, WIDTH, 48, "+");
+    rewardAmountText.setVisible(false);
+    totalBetText = new BalanceText(this, WIDTH, 80, "Total bet: ");
     var helpText = this.add.text(60, HEIGHT - 120, "Place your bet by entering the amount and clicking on the layout:", { fontSize: '22px', fontFamily: "Arial Black", fill: '#ffffff' }).setOrigin(0, 0.5);
     betBox = new TextBox(this, 460, HEIGHT - 57);
 
     var clearBut = new Button(this, WIDTH - 240, HEIGHT - 50, "Clear", function () { table.clearZones(); err.setVisible(false); });
     var playBut = new Button(this, WIDTH - 240, HEIGHT - 120, "Play", function () {
-        if (table.getZonesWithBets().length == 0) {
-            err.setText("You must place a bet on the table.");
-            err.setVisible(true);
-        }
-        else {
-            err.setVisible(false)
             wheel.spin();
-        };
     });
 
     err = new ErrorMsg(this, 640, 85, "Sample Text");
     err.setVisible(false);
-
 }
 
 function update() {

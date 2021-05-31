@@ -79,16 +79,17 @@ class ErrorMsg {
 }
 
 class BalanceText {
-    constructor(owner, x, y) {
+    constructor(owner, x, y, prefix) {
         this.balance = 0n;
-        this.text = owner.add.text(x, y, 'Balance: ' + this.balance + ' β', { fontSize: '32px', fontFamily: "Arial Black", fill: defaultRewardColor }).setOrigin(1.0, 0.5);
+        this.prefix = prefix;
+        this.text = owner.add.text(x, y, prefix + this.balance + ' β', { fontSize: '32px', fontFamily: "Arial Black", fill: defaultRewardColor }).setOrigin(1.0, 0.5);
 
         this.setBalance = function (newBalance) {
             if (!this.isValidAmount(newBalance))
                 return "Invalid input, please enter a number.";
 
             this.balance = BigInt(newBalance);
-            this.text.setText('Balance: ' + this.balance + ' β');
+            this.text.setText(prefix + this.balance + ' β');
             return true;
         };
 
@@ -120,6 +121,10 @@ class BalanceText {
 
             this.setBalance(this.balance + BigInt(amount));
             return true;
+        }
+
+        this.setVisible = function (visible) {
+            this.text.setVisible(visible);
         }
     }
 }

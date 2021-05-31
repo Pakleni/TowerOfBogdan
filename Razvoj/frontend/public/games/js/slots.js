@@ -70,6 +70,7 @@ function getSlots() {
             rewardAmmountText.setVisible(false);
             findReward();
             balance.decBalance(box.getText());
+            err.setVisible(true);
             slotsObj.startMove();
             setTimeout(function () {
                 slotsObj.announceCombo();
@@ -238,7 +239,7 @@ function showRewardAmmount() {
     if (rewardAmmount === 0)
         return;
     balance.incBalance(rewardAmmount);
-    rewardAmmountText.setText("+" + rewardAmmount + " β");
+    rewardAmmountText.setBalance(rewardAmmount);
     rewardAmmountText.setVisible(true);
 }
 
@@ -348,10 +349,11 @@ function create() {
         slotsObj.addSlotCol(currentCol);
     }
 
-    balance = new BalanceText(this, WIDTH, 16);
-    balance.setBalance(1_000_000n);
+    balance = new BalanceText(this, WIDTH, 16, "Balance: ");
+    balance.setBalance(1_000_000_000n);
 
-    rewardAmmountText = this.add.text(WIDTH, 48, '+100 β', { fontSize: '32px', fontFamily: "Arial Black", fill: defaultRewardColor }).setOrigin(1.0, 0.5).setVisible(false);
+    rewardAmmountText = new BalanceText(this, WIDTH, 48, "+");
+    rewardAmmountText.setVisible(false);
 
     var betText = this.add.text(60, HEIGHT - 120, "Place your bet:", { fontSize: '22px', fontFamily: "Arial Black", fill: '#ffffff' }).setOrigin(0, 0.5);
     box = new TextBox(this, 460, HEIGHT - 57);
@@ -359,7 +361,6 @@ function create() {
 
     err = new ErrorMsg(this, 640, 85, "Sample Text");
     err.setVisible(false);
-
 }
 
 function update() {

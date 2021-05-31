@@ -29,7 +29,7 @@ function create() {
     for (var i = 0; i < 5; i++)
         this.add.image(110 - i * 2, 150 - i * 2, 'card').setScale(0.75);
     
-    balance = new BalanceText(this, WIDTH, 16);
+    balance = new BalanceText(this, WIDTH, 16, "Balance: ");
     balance.setBalance(100n);
     var bet = this.add.text(WIDTH / 2, 320, "Place your bet:", { fontSize: '32px', fontFamily: "Arial Black", fill: '#ffffff' }).setOrigin(0.5, 0.5);
 

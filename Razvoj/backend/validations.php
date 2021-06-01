@@ -31,7 +31,7 @@
     {
         global $UserID;
 
-        if(!isset($arg) || $UserID < $arg)
+        if(!isset($arg) || getBogdin($UserID) < $arg)
         {
             http_response_code(403);
             exit();

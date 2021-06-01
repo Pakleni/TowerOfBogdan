@@ -14,7 +14,7 @@
         exit();
     }
 
-    auth();
+    @auth();
 
     if(!isset($_REQUEST["bet"]) || !checkIfInt($_REQUEST["bet"]) || $_REQUEST["bet"] <= 0)
     {
@@ -22,16 +22,16 @@
         exit();
     }
     
-    betAmmountInRange($_REQUEST["bet"]);
+    @betAmmountInRange($_REQUEST["bet"]);
 
     try
     {
         $game = new Slots();
         $reward = $game->getReward($_REQUEST["bet"]);
         $generatedSymbols = $game->getSymbols();
+        @updateBogdin($UserID, $reward[0] - $_REQUEST["bet"]);
 
         $answer = array($reward, $generatedSymbols);
-
         echo json_encode($answer);
     }
     catch(Exception $e)

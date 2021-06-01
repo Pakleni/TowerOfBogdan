@@ -14,7 +14,7 @@
         exit();
     }
 
-    auth();
+    @auth();
 
     $json = file_get_contents('php://input');
     $data = json_decode($json);
@@ -46,16 +46,16 @@
         $allBets += $tmp->bet;
     }
 
-    betAmmountInRange($allBets);
+    @betAmmountInRange($allBets);
 
     try
     {
         $game = new Roulette();
         $reward = $game->getReward($data->bets);
         $num = $game->getNum();
+        @updateBogdin($UserID, $reward - $_REQUEST["bet"]);
 
         $answer = array($reward, $num);
-
         echo json_encode($answer);
     }
     catch(Exception $e)

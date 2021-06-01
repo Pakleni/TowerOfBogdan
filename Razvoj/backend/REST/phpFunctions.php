@@ -15,7 +15,7 @@ function hashIt($pass) {
 	return password_hash(pepper($pass), PASSWORD_ARGON2ID);
 }
 
-function SQL($dbc, $sql, $bind, $params, $resNeeded)
+function SQL($dbc, $sql, $bind, $params, $resNeeded, $retNeeded)
 {
 	$stmt = mysqli_stmt_init($dbc);
 	if (!mysqli_stmt_prepare($stmt, $sql)) {
@@ -31,11 +31,15 @@ function SQL($dbc, $sql, $bind, $params, $resNeeded)
 	}
 	
 	$result = mysqli_stmt_get_result($stmt);
+
 	if ($result === FALSE && mysqli_errno($dbc) !== 0) {
 		die("Error Code: " . strval(mysqli_errno($dbc)));
 	}
 
 	$ret = array();
+
+	if(!$retNeeded)
+		return $ret;
 
 	if (mysqli_num_rows($result) > 0) {
 		while ($row = mysqli_fetch_assoc($result)) {
@@ -51,9 +55,9 @@ function SQL($dbc, $sql, $bind, $params, $resNeeded)
 
 function connectToDB()
 {
-	$user = 'Bogdan';
-	$pass = 'glupasifra';
-	$db = 'tower-of-bogdan';
+	$user = 'root';
+	$pass = '1234';
+	$db = 'towerofbogdan';
 
 	$dbc = mysqli_connect('localhost', $user, $pass, $db) or die("Unable to connect");
 	return $dbc;
@@ -71,14 +75,13 @@ function getId($mail, $pass)
 		WHERE Email = ?
 		SQL;
 
-	$result = SQL($dbc, $sql, "s", array($mail), false);
+	$result = SQL($dbc, $sql, "s", array($mail), false, true);
 	
 	
 	if (count($result) > 0) {
 		$row = $result[0];
-
 		if (password_verify(pepper($pass), $row['Password'])) {
-			$playerID = $row['Id'];
+			$playerID = $row['ID'];
 		}
 	}
 
@@ -97,7 +100,7 @@ function updateBogdin($id, $amount)
 		WHERE User.ID = ?
 		SQL;
 
-	SQL($dbc, $sql, "ii", array($amount,$id), false);
+	SQL($dbc, $sql, "ii", array($amount,$id), false, false);
 }
 
 function getBogdin($id)
@@ -107,10 +110,10 @@ function getBogdin($id)
 	$sql = <<<SQL
 		SELECT Bogdinari
 		FROM User
-		WHERE User.ID = $id;
+		WHERE User.ID = ?;
 		SQL;
 
-	$row = SQL($dbc, $sql, "i", array($id), true);
+	$row = SQL($dbc, $sql, "i", array($id), true, true);
 
 	return $row[0]["Bogdinari"];
 }
@@ -125,7 +128,7 @@ function createAccount($user, $pass, $mail)
 		WHERE Email = ?
 		SQL;
 
-    $result = SQL($dbc, $sql, "s", array($mail), false);
+    $result = SQL($dbc, $sql, "s", array($mail), false, true);
 	
 	if (count($result) > 0) { return false; }
 
@@ -136,7 +139,7 @@ function createAccount($user, $pass, $mail)
 		VALUES (?, ?, ?)
 		SQL;
 
-    SQL($dbc, $sql, "sss", array($user, $hashed, $mail), false);
+    SQL($dbc, $sql, "sss", array($user, $hashed, $mail), false, false);
 
 	return true;
 }

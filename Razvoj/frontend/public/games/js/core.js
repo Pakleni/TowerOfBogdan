@@ -3,9 +3,9 @@
 var WIDTH = 1280;
 var HEIGHT = 720;
 
-var reqUrl = "";
-var username = "pera@gmail.com";
-var password = "pera";
+var reqUrl = "/";
+var username = sessionStorage.getItem("email");
+var password = sessionStorage.getItem("password");
 
 var defaultNormalTint = 0xb5a8a8;
 var defaultHoverTint = 0xdad3d3;
@@ -187,6 +187,10 @@ function loadCoreSprites(game) {
 function authUser(callback) {
     //TODO ako nema user i pass u session storage onda vrati da mora login
 
+    if (username === null || password === null) {
+        callback("Not logged in");
+        return;
+    }
     $.ajax({
         method: "GET",
         url: reqUrl + "REST/getBogdin.php",
@@ -198,7 +202,7 @@ function authUser(callback) {
             callback(data);
         },
         error: function (data, status, xhr) {
-            callback("Error");
+            callback(status);
             //TODO specificirati errore
         }
     });

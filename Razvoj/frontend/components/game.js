@@ -18,7 +18,7 @@ export default function Game({ title, src }) {
 
   if (!ISSERVER) {
     // Access sessionStorage
-    const username = sessionStorage.getItem("username");
+    const username = sessionStorage.getItem("email");
     if (username !== null) {
       isLogged = true;
     }

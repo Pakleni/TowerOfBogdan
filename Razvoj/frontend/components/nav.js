@@ -14,7 +14,6 @@ const links = [
 }));
 
 const linksAccount = [
-  { href: "/account/change", label: "Change Pass" },
   { href: "/signup", label: "Sign Up" },
   { href: "/login", label: "Login" },
 ].map((link) => ({
@@ -22,12 +21,13 @@ const linksAccount = [
   key: `nav-link-${link.href}-${link.label}`,
 }));
 
-const linksLogged = [{ href: "/account", label: "Account Page" }].map(
-  (link) => ({
-    ...link,
-    key: `nav-link-${link.href}-${link.label}`,
-  })
-);
+const linksLogged = [
+  { href: "/account/change", label: "Change Pass" },
+  { href: "/account", label: "Account Page" },
+].map((link) => ({
+  ...link,
+  key: `nav-link-${link.href}-${link.label}`,
+}));
 
 function Nav() {
   const [isShowing, setShowing] = useState(false);
@@ -39,7 +39,7 @@ function Nav() {
   let username = null;
   if (!ISSERVER) {
     // Access sessionStorage
-    username = sessionStorage.getItem("username");
+    username = sessionStorage.getItem("email");
     if (username !== null) {
       isLogged = true;
     }
@@ -128,8 +128,8 @@ function Nav() {
                       <a
                         className="dropdown-item"
                         onClick={() => {
-                          sessionStorage.setItem("email", null);
-                          sessionStorage.setItem("password", null);
+                          sessionStorage.removeItem("email");
+                          sessionStorage.removeItem("password");
                           setShowing(false);
                           setDropped(false);
                         }}

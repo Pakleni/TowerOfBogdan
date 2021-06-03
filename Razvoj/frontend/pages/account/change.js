@@ -5,24 +5,19 @@ import Title from "../../components/title";
 import axios from "axios";
 
 import { useForm } from "react-hook-form";
-
-function SignOut() {
-  sessionStorage.setItem("email", null);
-  sessionStorage.setItem("password", null);
-}
+import NotLogged from "../../components/notlogged";
 
 function ChangePassword() {
   const { register, handleSubmit } = useForm();
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setSuccess] = useState(null);
 
-  const [emailGood, setEmailGood] = useState(0);
   const [passwordGood, setPasswordGood] = useState(0);
   const [newPassGood, setNewPassGood] = useState(0);
 
   const reg = async (data) => {
     try {
-      SignOut();
+      data.email = sessionStorage.getItem("email");
       setIsLoading(true);
       const response = await axios.post(
         process.env.host + "/REST/account/change-pwd.php",
@@ -33,6 +28,8 @@ function ChangePassword() {
       );
       const code = response.status;
       if (code === 200) {
+        sessionStorage.setItem("email", data.email);
+        sessionStorage.setItem("password", data.new_password);
         setSuccess(true);
       } else {
         setSuccess(false);
@@ -44,13 +41,6 @@ function ChangePassword() {
   };
 
   const checkSubmitted = () => {
-    var email = window.document.forms.registerform.email.value;
-    if (email === "") {
-      setEmailGood(1);
-    } else {
-      setEmailGood(0);
-    }
-
     var password = window.document.forms.registerform.password.value;
     if (password === "") {
       setPasswordGood(1);
@@ -66,7 +56,18 @@ function ChangePassword() {
     }
   };
 
-  return (
+  const ISSERVER = typeof window === "undefined";
+  let isLogged = false;
+
+  if (!ISSERVER) {
+    // Access sessionStorage
+    const username = sessionStorage.getItem("email");
+    if (username !== null) {
+      isLogged = true;
+    }
+  }
+
+  return isLogged ? (
     <div>
       <Title />
       <section className="hero">
@@ -85,27 +86,6 @@ function ChangePassword() {
                 <div className="tile is-parent is-vertical">
                   <div className="tile is-child is-4">
                     <form name="registerform" onSubmit={handleSubmit(reg)}>
-                      <div className="field">
-                        <label htmlFor="email">Email</label>
-                        {emailGood === 1 && (
-                          <label className="has-text-danger">
-                            {" <- "}Required field
-                          </label>
-                        )}
-                        <div className={`control has-icons-left`}>
-                          <span className="icon is-small is-left">
-                            <FontAwesomeIcon icon="envelope"></FontAwesomeIcon>
-                          </span>
-                          <input
-                            className={`input`}
-                            type="email"
-                            id="email"
-                            name="email"
-                            ref={register({ required: true })}
-                            disabled={isSuccess !== null}
-                          />
-                        </div>
-                      </div>
                       <div className="control">
                         <input
                           type="text"
@@ -192,6 +172,10 @@ function ChangePassword() {
           </div>
         </div>
       </section>
+    </div>
+  ) : (
+    <div className="container">
+      <NotLogged />
     </div>
   );
 }

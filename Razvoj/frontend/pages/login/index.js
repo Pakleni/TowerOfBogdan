@@ -43,10 +43,10 @@ function Login() {
       );
       const code = response.status;
       if (code === 200) {
-        setSuccess(true);
-      } else {
         sessionStorage.setItem("email", data.email);
         sessionStorage.setItem("password", data.password);
+        setSuccess(true);
+      } else {
         setSuccess(false);
       }
     } catch (err) {

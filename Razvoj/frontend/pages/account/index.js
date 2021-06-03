@@ -6,8 +6,8 @@ import Link from "next/link";
 import NotLogged from "../../components/notlogged";
 
 function SignOut() {
-  sessionStorage.setItem("email", null);
-  sessionStorage.setItem("password", null);
+  sessionStorage.removeItem("email");
+  sessionStorage.removeItem("password");
 }
 
 export default function Account() {
@@ -23,7 +23,7 @@ export default function Account() {
 
   if (!ISSERVER) {
     // Access sessionStorage
-    username = sessionStorage.getItem("username");
+    username = sessionStorage.getItem("email");
     if (username !== null) {
       isLogged = true;
       // axios request

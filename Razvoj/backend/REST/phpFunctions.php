@@ -143,3 +143,35 @@ function createAccount($user, $pass, $mail)
 
 	return true;
 }
+
+function checkEmail($mail)
+{
+	$dbc = connectToDB();
+
+	$sql = <<<SQL
+		SELECT *
+		FROM User
+		WHERE Email = ?
+		SQL;
+
+    $result = SQL($dbc, $sql, "s", array($mail), false, true);
+	
+	if (count($result) > 0) { return true; }
+	return false;
+}
+
+function checkUsername($username)
+{
+	$dbc = connectToDB();
+
+	$sql = <<<SQL
+		SELECT *
+		FROM User
+		WHERE Username = ?
+		SQL;
+
+    $result = SQL($dbc, $sql, "s", array($username), false, true);
+	
+	if (count($result) > 0) { return true; }
+	return false;
+}

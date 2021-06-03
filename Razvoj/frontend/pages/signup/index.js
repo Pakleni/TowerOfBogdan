@@ -18,18 +18,23 @@ function Register() {
   // "Email Already Exists" => 201;
   // "Username Already Exists" => 202;
   // "Account was not succesfully created" => 203;
-  // "Account was succesfully created" => 204;
+  // "Account was succesfully created" => 200;
 
   const reg = async (data) => {
     try {
       setIsLoading(true);
-      const response = await axios.post("/api/signup", data, {
-        timeout: 60000,
-      });
-      setErrorCode(response.data);
-      if (response.data === 200) {
+      const response = await axios.post(
+        process.env.host + "/REST/account/register.php",
+        data,
+        {
+          timeout: 60000,
+        }
+      );
+      const code = response.status;
+      setErrorCode(code);
+      if (code === 200) {
         setSuccess(true);
-      } else if (response.data === 203 || response.data === 204) {
+      } else if (code === 203) {
         setSuccess(false);
       }
     } catch (err) {

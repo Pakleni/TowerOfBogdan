@@ -6,36 +6,26 @@ import axios from "axios";
 
 import { useForm } from "react-hook-form";
 
-function Login() {
+function SignOut() {
+  sessionStorage.setItem("email", null);
+  sessionStorage.setItem("password", null);
+}
+
+function ChangePassword() {
   const { register, handleSubmit } = useForm();
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setSuccess] = useState(null);
+
   const [emailGood, setEmailGood] = useState(0);
   const [passwordGood, setPasswordGood] = useState(0);
-
-  // OK => 200
-
-  const checkSubmitted = () => {
-    var email = window.document.forms.loginform.email.value;
-    if (email === "") {
-      setEmailGood(1);
-    } else {
-      setEmailGood(0);
-    }
-
-    var password = window.document.forms.loginform.password.value;
-    if (password === "") {
-      setPasswordGood(1);
-    } else {
-      setPasswordGood(0);
-    }
-  };
+  const [newPassGood, setNewPassGood] = useState(0);
 
   const reg = async (data) => {
     try {
+      SignOut();
       setIsLoading(true);
       const response = await axios.post(
-        process.env.host + "/REST/account/login.php",
+        process.env.host + "/REST/account/change-pwd.php",
         data,
         {
           timeout: 60000,
@@ -45,14 +35,35 @@ function Login() {
       if (code === 200) {
         setSuccess(true);
       } else {
-        sessionStorage.setItem("email", data.email);
-        sessionStorage.setItem("password", data.password);
         setSuccess(false);
       }
     } catch (err) {
       setSuccess(false);
     }
     setIsLoading(false);
+  };
+
+  const checkSubmitted = () => {
+    var email = window.document.forms.registerform.email.value;
+    if (email === "") {
+      setEmailGood(1);
+    } else {
+      setEmailGood(0);
+    }
+
+    var password = window.document.forms.registerform.password.value;
+    if (password === "") {
+      setPasswordGood(1);
+    } else {
+      setPasswordGood(0);
+    }
+
+    var newPassword = window.document.forms.registerform.new_password.value;
+    if (newPassword === "") {
+      setNewPassGood(1);
+    } else {
+      setNewPassGood(0);
+    }
   };
 
   return (
@@ -62,7 +73,7 @@ function Login() {
         <div className="hero-body">
           <div className="container">
             <h1 className="title is-1">Tower Of Bogdan</h1>
-            <h2 className="subtitle is-3">Login</h2>
+            <h2 className="subtitle is-3">Register</h2>
           </div>
         </div>
       </section>
@@ -73,7 +84,7 @@ function Login() {
               <div className="tile is-ancestor">
                 <div className="tile is-parent is-vertical">
                   <div className="tile is-child is-4">
-                    <form name="loginform" onSubmit={handleSubmit(reg)}>
+                    <form name="registerform" onSubmit={handleSubmit(reg)}>
                       <div className="field">
                         <label htmlFor="email">Email</label>
                         {emailGood === 1 && (
@@ -81,15 +92,12 @@ function Login() {
                             {" <- "}Required field
                           </label>
                         )}
-                        <div
-                          className={`control has-icons-left
-                          }`}
-                        >
+                        <div className={`control has-icons-left`}>
                           <span className="icon is-small is-left">
                             <FontAwesomeIcon icon="envelope"></FontAwesomeIcon>
                           </span>
                           <input
-                            className="input"
+                            className={`input`}
                             type="email"
                             id="email"
                             name="email"
@@ -97,6 +105,14 @@ function Login() {
                             disabled={isSuccess !== null}
                           />
                         </div>
+                      </div>
+                      <div className="control">
+                        <input
+                          type="text"
+                          name="name"
+                          style={{ display: "none" }}
+                          ref={register()}
+                        />
                       </div>
                       <div className="field">
                         <label htmlFor="password">Password</label>
@@ -114,6 +130,27 @@ function Login() {
                             type="password"
                             id="password"
                             name="password"
+                            ref={register({ required: true })}
+                            disabled={isSuccess !== null}
+                          />
+                        </div>
+                      </div>
+                      <div className="field">
+                        <label htmlFor="new_password">New Password</label>
+                        {newPassGood === 1 && (
+                          <label className="has-text-danger">
+                            {" <- "}Required field
+                          </label>
+                        )}
+                        <div className={`control has-icons-left`}>
+                          <span className="icon is-small is-left">
+                            <FontAwesomeIcon icon="unlock-alt"></FontAwesomeIcon>
+                          </span>
+                          <input
+                            className={`input`}
+                            type="password"
+                            id="new_password"
+                            name="new_password"
                             ref={register({ required: true })}
                             disabled={isSuccess !== null}
                           />
@@ -137,18 +174,14 @@ function Login() {
                   <div className="tile is-child is-4">
                     {isSuccess === true && (
                       <div className="notification is-success is-light">
-                        <p className="title is-5">
-                          Login successfull <br />
-                          <br />
-                          Success!
-                        </p>
+                        <p className="title is-5">Success!</p>
                       </div>
                     )}
                     {isSuccess === false && (
                       <div className="notification is-danger is-light">
                         <p className="title is-5">
                           There was an error. <br />
-                          <br /> Please try again.
+                          <br /> Please try again later.
                         </p>
                       </div>
                     )}
@@ -163,4 +196,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default ChangePassword;

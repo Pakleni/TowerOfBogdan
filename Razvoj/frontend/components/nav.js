@@ -14,7 +14,7 @@ const links = [
 }));
 
 const linksAccount = [
-  { href: "/account", label: "Account Page" },
+  { href: "/account/change", label: "Change Pass" },
   { href: "/signup", label: "Sign Up" },
   { href: "/login", label: "Login" },
 ].map((link) => ({
@@ -22,9 +22,28 @@ const linksAccount = [
   key: `nav-link-${link.href}-${link.label}`,
 }));
 
+const linksLogged = [{ href: "/account", label: "Account Page" }].map(
+  (link) => ({
+    ...link,
+    key: `nav-link-${link.href}-${link.label}`,
+  })
+);
+
 function Nav() {
   const [isShowing, setShowing] = useState(false);
   const [isDropped, setDropped] = useState(false);
+  let isLogged = false;
+
+  const ISSERVER = typeof window === "undefined";
+
+  let username = null;
+  if (!ISSERVER) {
+    // Access sessionStorage
+    username = sessionStorage.getItem("username");
+    if (username !== null) {
+      isLogged = true;
+    }
+  }
 
   return (
     <div>
@@ -75,7 +94,9 @@ function Nav() {
                     aria-controls="dropdown-menu7"
                     onClick={() => setDropped(!isDropped)}
                   >
-                    <span>Account</span>
+                    <span style={{ minWidth: "80px" }}>
+                      {isLogged ? username : "Account"}
+                    </span>
                     <span className="icon is-small">
                       <FontAwesomeIcon
                         icon={`${isDropped ? "angle-up" : "angle-down"}`}
@@ -88,19 +109,36 @@ function Nav() {
                     className="dropdown-content"
                     style={{ position: "fixed" }}
                   >
-                    {linksAccount.map(({ key, href, label }) => (
-                      <Link key={key} href={href}>
-                        <a
-                          className="dropdown-item"
-                          onClick={() => {
-                            setShowing(false);
-                            setDropped(false);
-                          }}
-                        >
-                          <b>{label}</b>
-                        </a>
-                      </Link>
-                    ))}
+                    {(isLogged ? linksLogged : linksAccount).map(
+                      ({ key, href, label }) => (
+                        <Link key={key} href={href}>
+                          <a
+                            className="dropdown-item"
+                            onClick={() => {
+                              setShowing(false);
+                              setDropped(false);
+                            }}
+                          >
+                            <b>{label}</b>
+                          </a>
+                        </Link>
+                      )
+                    )}
+                    {isLogged ? (
+                      <a
+                        className="dropdown-item"
+                        onClick={() => {
+                          sessionStorage.setItem("email", null);
+                          sessionStorage.setItem("password", null);
+                          setShowing(false);
+                          setDropped(false);
+                        }}
+                      >
+                        <b>Log out</b>
+                      </a>
+                    ) : (
+                      ""
+                    )}
                   </div>
                 </div>
               </div>

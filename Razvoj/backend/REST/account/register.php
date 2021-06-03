@@ -17,24 +17,28 @@
         exit();
     }
 
-    if (isset($_POST["email"]) && isset($_POST["username"]) && isset($_POST["password"]))
+
+    $json = file_get_contents('php://input');
+    $data = json_decode($json);
+
+    if (isset($data->email) && isset($data->username) && isset($data->password))
     {
-        if(filter_var($_POST["email"], FILTER_VALIDATE_EMAIL) === false)
+        if(filter_var($data->email, FILTER_VALIDATE_EMAIL) === false)
         {
             http_response_code(401);
             exit();
         }
-        if(@checkEmail($_POST["email"]))
+        if(@checkEmail($data->email))
         {
             http_response_code(201);
             exit();
         }
-        if(@checkUsername($_POST["username"]))
+        if(@checkUsername($data->username))
         {
             http_response_code(202);
             exit();
         }
-        $flag = @createAccount($_POST["username"], $_POST["password"], $_POST["email"]);
+        $flag = @createAccount($data->username, $data->password, $data->email);
         if($flag)
         {
             http_response_code(204);

@@ -116,7 +116,9 @@
                     $this->winner = -1;
                     return;
                 }
-                array_push($this->dealerCards,$this->generateVal());
+                $tmp = $this->generateVal();
+                $sumD += $tmp;
+                array_push($this->dealerCards, $tmp);
                 if($this->checkIfBusted($this->dealerCards))
                 {
                     $this->winner = 1;

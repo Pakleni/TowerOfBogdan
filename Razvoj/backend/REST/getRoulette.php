@@ -53,7 +53,7 @@
         $game = new Roulette();
         $reward = $game->getReward($data->bets);
         $num = $game->getNum();
-        @updateBogdin($UserID, $reward - $_REQUEST["bet"]);
+        @updateBogdin($UserID, $reward - $allBets);
 
         $answer = array($reward, $num);
         echo json_encode($answer);

@@ -175,3 +175,33 @@ function checkUsername($username)
 	if (count($result) > 0) { return true; }
 	return false;
 }
+
+function changePassword($id, $newPassword)
+{
+	$dbc = connectToDB();
+
+	$sql = <<<SQL
+		UPDATE User
+		SET User.Password = ?
+		WHERE User.ID = ?
+		SQL;
+
+	$hashed = hashIt($newPassword);
+
+	SQL($dbc, $sql, "si", array($hashed, $id), false, false);
+}
+
+//TODO Pace
+function ascend($id)
+{
+	$ret = true;
+
+
+	return $ret;
+}
+
+//TODO Pace/Ognjen
+function getTop5()
+{
+	
+}

@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 
 import Link from "next/link";
 import Title from "./title";
+import NotLogged from "./notlogged";
 
 Game.propTypes = {
   title: PropTypes.string.isRequired,
@@ -11,7 +12,19 @@ Game.propTypes = {
 };
 
 export default function Game({ title, src }) {
-  return (
+  let isLogged = false;
+
+  const ISSERVER = typeof window === "undefined";
+
+  if (!ISSERVER) {
+    // Access sessionStorage
+    const username = sessionStorage.getItem("username");
+    if (username !== null) {
+      isLogged = true;
+    }
+  }
+
+  return isLogged ? (
     <div className="container">
       <Title title={title}></Title>
       <div className="section">
@@ -47,6 +60,10 @@ export default function Game({ title, src }) {
           .
         </p>
       </div>
+    </div>
+  ) : (
+    <div className="container">
+      <NotLogged />
     </div>
   );
 }

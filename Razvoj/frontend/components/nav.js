@@ -4,6 +4,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import Link from "next/link";
 
+import { SignOut } from "../pages/account/index";
+
 const links = [
   { href: "/twentyone", label: "21" },
   { href: "/slots", label: "Slots" },
@@ -22,8 +24,8 @@ const linksAccount = [
 }));
 
 const linksLogged = [
-  { href: "/account/change", label: "Change Pass" },
   { href: "/account", label: "Account Page" },
+  { href: "/account/change", label: "Change Pass" },
 ].map((link) => ({
   ...link,
   key: `nav-link-${link.href}-${link.label}`,
@@ -128,8 +130,7 @@ function Nav() {
                       <a
                         className="dropdown-item"
                         onClick={() => {
-                          sessionStorage.removeItem("email");
-                          sessionStorage.removeItem("password");
+                          SignOut();
                           setShowing(false);
                           setDropped(false);
                         }}

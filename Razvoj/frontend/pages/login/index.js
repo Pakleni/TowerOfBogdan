@@ -1,5 +1,6 @@
 // Autor: Ognjen Bjeletic 2018/0447
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
 import Title from "../../components/title";
 import axios from "axios";
@@ -7,6 +8,8 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 
 function Login() {
+  const router = useRouter();
+
   const { register, handleSubmit } = useForm();
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setSuccess] = useState(null);
@@ -45,6 +48,7 @@ function Login() {
       if (code === 200) {
         sessionStorage.setItem("email", data.email);
         sessionStorage.setItem("password", data.password);
+        router.push("/");
         setSuccess(true);
       } else {
         setSuccess(false);

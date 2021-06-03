@@ -1,9 +1,21 @@
 // Autor: Ognjen Bjeletic 2018/0447
 import React from "react";
 import Title from "../../components/title";
+import NotLogged from "../../components/notlogged";
 
 export default function Bogdinars() {
-  return (
+  let isLogged = false;
+
+  const ISSERVER = typeof window === "undefined";
+
+  if (!ISSERVER) {
+    // Access sessionStorage
+    const username = sessionStorage.getItem("email");
+    if (username !== null) {
+      isLogged = true;
+    }
+  }
+  return isLogged ? (
     <div className="container">
       <Title title="Bogdinars"></Title>
       <div className="section is-flex is-align-content-center is-flex-direction-column">
@@ -34,6 +46,10 @@ export default function Bogdinars() {
           width: 150px;
         }
       `}</style>
+    </div>
+  ) : (
+    <div className="container">
+      <NotLogged />
     </div>
   );
 }

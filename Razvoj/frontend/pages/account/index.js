@@ -5,9 +5,11 @@ import Title from "../../components/title";
 import Link from "next/link";
 import NotLogged from "../../components/notlogged";
 
-function SignOut() {
+export function SignOut() {
   sessionStorage.removeItem("email");
   sessionStorage.removeItem("password");
+  location.reload();
+  return false;
 }
 
 export default function Account() {

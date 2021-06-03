@@ -55,8 +55,8 @@ function SQL($dbc, $sql, $bind, $params, $resNeeded, $retNeeded)
 
 function connectToDB()
 {
-	$user = 'root';
-	$pass = '1234';
+	$user = 'bogdan';
+	$pass = 'glupasifra';
 	$db = 'towerofbogdan';
 
 	$dbc = mysqli_connect('localhost', $user, $pass, $db) or die("Unable to connect");

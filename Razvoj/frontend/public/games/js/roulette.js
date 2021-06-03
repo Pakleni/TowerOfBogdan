@@ -14,6 +14,8 @@ var config = {
 
 var numberPositions = [24, 4, 23, 0, 19, 34, 15, 30, 11, 26, 7, 29, 10, 3, 22, 37, 18, 33, 14, 12, 31, 16, 35, 20, 1, 8, 27, 6, 25, 9, 28, 13, 32, 17, 36, 21, 2, 5];
 
+var canBet = false;
+
 var wheel;
 var ball;
 var box;
@@ -66,7 +68,6 @@ var decceleration = 0.0002;
 
 class ChipZone {
     constructor(owner, left, top, width, height, name) {
-        this.canPlay = false;
         this.name = name;
         this.zone = owner.add.zone(left, top, width, height).setOrigin(0, 0).setInteractive();
 
@@ -75,7 +76,7 @@ class ChipZone {
 
         let that = this;
         this.zone.on('pointerdown', function (pointer) {
-            if (!that.canPlay) {
+            if (canBet) {
                 if (pointer.rightButtonDown()) {
                     that.clear();
                 }
@@ -386,7 +387,7 @@ function authUserCallback(bogdinars) {
         clearBut.setVisible(true);
         playBut.setVisible(true);
         loadingScreen.setVisible(false);
-        table.canPlay = true;
+        canBet = true;
     }
 }
 

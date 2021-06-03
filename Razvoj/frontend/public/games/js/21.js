@@ -39,24 +39,6 @@ function preload() {
     }
 }
 
-/*function startGame() {
-    betMsg.setVisible(false);
-    playBtns.setVisible(true);
-    playerHand.setVisible(true);
-    dealerHand.setVisible(true);
-    canPlay = false;
-    playerHand.addCard(Math.floor(1 + Math.random() * 11), function () {
-        dealerHand.addCard(Math.floor(1 + Math.random() * 11), function () {
-            playerHand.addCard(Math.floor(1 + Math.random() * 11), function () {
-                dealerHand.addCard(Math.floor(1 + Math.random() * 11), function () {
-                    canPlay = true;
-                    endRsl.setVisible(true);
-                })
-            });
-        })
-    });
-}*/
-
 function keepAlive() {
     $.ajax({
         method: "POST",
@@ -86,6 +68,7 @@ function evaluate(json) {
 }
 
 function startGame() {
+    betMsg.playButton.setText("Playing...");
     let betAmount = betMsg.box.getText();
 
     $.ajax({
@@ -101,7 +84,6 @@ function startGame() {
         },
         success: function (data, status, xhr) {
             let json = JSON.parse(data);
-            console.log(json);
             betMsg.setVisible(false);
             playerHand.setVisible(true);
             dealerHand.setVisible(true);
@@ -112,6 +94,8 @@ function startGame() {
                     playerHand.addCard(json[1][0][1], function () {
                         dealerHand.addCard(json[1][1][1], function () {
                             evaluate(json);
+                            playBtns.hitButton.setText("Hit");
+                            playBtns.standButton.setText("Stand");
                             canPlay = true;
                         })
                     })
@@ -121,6 +105,7 @@ function startGame() {
         error: function (data, status, xhr) {
             err.setText("Something seems wrong, please try again.");
             err.setVisible(true);
+            betMsg.playButton.setText("Play");
             canPlay = true;
         }
     });
@@ -129,6 +114,8 @@ function startGame() {
 function dealerDraw(json, numOfCards) {
     if (numOfCards == 0) {
         evaluate(json);
+        playBtns.hitButton.setText("Hit");
+        playBtns.standButton.setText("Stand");
         canPlay = true;
     }
     else {
@@ -139,6 +126,8 @@ function dealerDraw(json, numOfCards) {
 }
 
 function hit() {
+    playBtns.hitButton.setText("Playing...");
+    playBtns.standButton.setText("Playing...");
     $.ajax({
         method: "POST",
         url: reqUrl + "REST/get21.php",
@@ -161,12 +150,16 @@ function hit() {
         error: function (data, status, xhr) {
             err.setText("Something seems wrong, please try again.");
             err.setVisible(true);
+            playBtns.hitButton.setText("Hit");
+            playBtns.standButton.setText("Stand");
             canPlay = true;
         }
     });
 }
 
 function stand() {
+    playBtns.hitButton.setText("Playing...");
+    playBtns.standButton.setText("Playing...");
     $.ajax({
         method: "POST",
         url: reqUrl + "REST/get21.php",
@@ -187,6 +180,8 @@ function stand() {
         error: function (data, status, xhr) {
             err.setText("Something seems wrong, please try again.");
             err.setVisible(true);
+            playBtns.hitButton.setText("Hit");
+            playBtns.standButton.setText("Stand");
             canPlay = true;
         }
     });
@@ -215,6 +210,7 @@ class BetMessage {
     setVisible(visible) {
         this.betText.setVisible(visible);
         this.box.setVisible(visible);
+        this.playButton.setText("Play");
         this.playButton.setVisible(visible);
     }
 };
@@ -266,15 +262,12 @@ class Hand {
         this.cards.forEach(e => { e.move(); });
     }
     addCard(number, callback) {
-        if (this.numOfCards < 6) {
-            this.callback = callback;
-            let card = this.cards[this.numOfCards];
-            card.card.setTexture('card-' + number);
-            card.number = number;
-            card.startMove();
-            ++this.numOfCards;
-        }
-        else callback(); //TODO izbaci ovo
+        this.callback = callback;
+        let card = this.cards[this.numOfCards];
+        card.card.setTexture('card-' + number);
+        card.number = number;
+        card.startMove();
+        ++this.numOfCards;
     }
     finishMove() {
         this.amount += this.cards[this.numOfCards - 1].number;
@@ -307,6 +300,8 @@ class PlayButtons {
         });
     }
     setVisible(visible) {
+        playBtns.hitButton.setText("Hit");
+        playBtns.standButton.setText("Stand");
         this.hitButton.setVisible(visible);
         this.standButton.setVisible(visible);
     }
@@ -376,6 +371,9 @@ function create() {
 
     loadingScreen = new LoadingScreen(this, WIDTH, HEIGHT);
     authUser(authUserCallback);
+
+
+    setInterval(keepAlive, 600_000);
 }
 
 
@@ -383,5 +381,19 @@ function update() {
     playerHand.move();
     dealerHand.move();
 }
+
+$(window).on("unload", function () {
+    $.ajax({
+        method: "POST",
+        url: reqUrl + "REST/get21.php",
+        dataType: "text",
+        headers: {
+            "Authorization": "Basic " + btoa(username + ":" + password)
+        },
+        data: {
+            operation: "end"
+        }
+    });
+});
 
 var game = new Phaser.Game(config);

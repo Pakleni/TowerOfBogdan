@@ -41,7 +41,7 @@
         $flag = @createAccount($data->username, $data->password, $data->email);
         if($flag)
         {
-            http_response_code(204);
+            http_response_code(200);
             exit();
         }
         else

@@ -1,6 +1,11 @@
 // Autor: Aleksandar Dincic 2018/0028
 
+var WIDTH = 1280;
+var HEIGHT = 720;
+
 var reqUrl = "";
+var username = "pera@gmail.com";
+var password = "pera";
 
 var defaultNormalTint = 0xb5a8a8;
 var defaultHoverTint = 0xdad3d3;
@@ -24,6 +29,19 @@ function setButtonHover(button) {
     })
 }
 
+class LoadingScreen {
+    constructor(owner) {
+        this.visible = true;
+        this.bg = owner.add.rectangle(0, 0, WIDTH, HEIGHT, 0x000000).setOrigin(0, 0).setAlpha(0.5);
+        this.loadingText = owner.add.text(WIDTH / 2, HEIGHT / 2, "Connecting to the server...", { fontSize: '32px', fontFamily: "Arial Black", fill: defaultTextColor }).setOrigin(0.5, 0.5);
+    }
+    setVisible(visible) {
+        this.visible = visible;
+        this.bg.setVisible(visible);
+        this.loadingText.setVisible(visible);
+    }
+}
+
 class Button {
     constructor(owner, x, y, text, onDown) {
         this.normalTint = defaultNormalTint;
@@ -41,6 +59,10 @@ class Button {
             this.bg.setVisible(visible);
             this.text.setVisible(visible);
         };
+
+        this.setText = function (text) {
+            this.text.setText(text);
+        }
     }
 }
 
@@ -160,4 +182,24 @@ function loadCoreSprites(game) {
     game.load.image('textbox', 'sprites/textbox.png');
     game.load.image('errormsg', 'sprites/errorMsg.png');
     game.load.image('closebutton', 'sprites/closeButton.png')
+}
+
+function authUser(callback) {
+    //TODO ako nema user i pass u session storage onda vrati da mora login
+
+    $.ajax({
+        method: "GET",
+        url: reqUrl + "REST/getBogdin.php",
+        dataType: "text",
+        headers: {
+            "Authorization": "Basic " + btoa(username + ":" + password)
+        },
+        success: function (data, status, xhr) {
+            callback(data);
+        },
+        error: function (data, status, xhr) {
+            callback("Error");
+            //TODO specificirati errore
+        }
+    });
 }

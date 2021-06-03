@@ -1,8 +1,5 @@
 // Autor: Aleksandar Dincic 2018/0028
 
-var WIDTH = 1280;
-var HEIGHT = 720;
-
 var config = {
     type: Phaser.AUTO,
     backgroundColor: '#600003',
@@ -15,9 +12,12 @@ var config = {
     }
 };
 
+var loadingScreen;
 var balance;
 var box;
+var betText;
 var err;
+var playBut;
 var rewardAmmountText;
 
 var symbols = ['Cherry', 'Lemon', 'Eggplant', 'Grapes', 'Banana', 'Seven', 'Egg', 'Diamond', 'Treasure', 'Bogdan'];
@@ -52,15 +52,16 @@ function convertCombo(matrix) {
 }
 
 function getSlots() {
+    let betAmount = box.getText();
     $.ajax({
         method: "POST",
         url: reqUrl + "REST/getSlots.php",
         dataType: "text",
         headers: {
-            "Authorization": "Basic " + btoa("username:password")
+            "Authorization": "Basic " + btoa(username + ":" + password)
         },
         data: {
-            bet: box.getText()
+            bet: betAmount
         },
         success: function (data, status, xhr) {
             let json = JSON.parse(data);
@@ -69,8 +70,7 @@ function getSlots() {
             rewardAmmount = json[0][0];
             rewardAmmountText.setVisible(false);
             findReward();
-            balance.decBalance(box.getText());
-            err.setVisible(true);
+            balance.decBalance(betAmount);
             slotsObj.startMove();
             setTimeout(function () {
                 slotsObj.announceCombo();
@@ -81,6 +81,7 @@ function getSlots() {
             err.setVisible(true);
             neededCombo = null;
             slotsObj.spun = false;
+            playBut.setText("Spin");
         }
     });
 }
@@ -279,6 +280,7 @@ class slots {
             }
             else {
                 this.spun = true;
+                playBut.setText("Spinning...");
                 err.setVisible(false);
                 getSlots();
             }
@@ -300,11 +302,26 @@ class slots {
             });
             this.moving = false;
             this.spun = false;
+            playBut.setText("Spin");
         }
     }
 }
 
 let slotsObj = new slots();
+
+function authUserCallback(bogdinars) {
+    if (isNaN(bogdinars)) {
+        loadingScreen.loadingText.setText(bogdinars);
+    }
+    else {
+        balance.setBalance(bogdinars);
+        balance.setVisible(true);
+        box.setVisible(true);
+        betText.setVisible(true);
+        playBut.setVisible(true);
+        loadingScreen.setVisible(false);
+    }
+}
 
 function create() {
     this.add.image(slotCenterX, slotCenterY, 'slot');
@@ -350,17 +367,23 @@ function create() {
     }
 
     balance = new BalanceText(this, WIDTH, 16, "Balance: ");
-    balance.setBalance(1_000_000_000n);
+    balance.setVisible(false);
 
     rewardAmmountText = new BalanceText(this, WIDTH, 48, "+");
     rewardAmmountText.setVisible(false);
 
-    var betText = this.add.text(60, HEIGHT - 120, "Place your bet:", { fontSize: '22px', fontFamily: "Arial Black", fill: '#ffffff' }).setOrigin(0, 0.5);
+    betText = this.add.text(60, HEIGHT - 120, "Place your bet:", { fontSize: '22px', fontFamily: "Arial Black", fill: '#ffffff' }).setOrigin(0, 0.5);
+    betText.setVisible(false);
     box = new TextBox(this, 460, HEIGHT - 57);
-    var playBut = new Button(this, WIDTH - 240, HEIGHT - 58, "Play", function () { slotsObj.spin(); });
+    box.setVisible(false);
+    playBut = new Button(this, WIDTH - 240, HEIGHT - 58, "Spin", function () { slotsObj.spin(); });
+    playBut.setVisible(false);
 
     err = new ErrorMsg(this, 640, 85, "Sample Text");
     err.setVisible(false);
+
+    loadingScreen = new LoadingScreen(this);
+    authUser(authUserCallback);
 }
 
 function update() {

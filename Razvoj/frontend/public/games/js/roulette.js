@@ -1,8 +1,5 @@
 // Autor: Aleksandar Dincic 2018/0028
 
-var WIDTH = 1280;
-var HEIGHT = 720;
-
 var config = {
     type: Phaser.AUTO,
     backgroundColor: '#35654d',
@@ -19,12 +16,17 @@ var numberPositions = [24, 4, 23, 0, 19, 34, 15, 30, 11, 26, 7, 29, 10, 3, 22, 3
 
 var wheel;
 var ball;
-var betBox;
+var box;
 var table;
 var err;
 var balance;
 var totalBetText;
+var clearBut;
+var playBut;
+var helpText;
 var rewardAmountText;
+var loadingScreen;
+
 var totalBetAmmount = 0;
 
 var wheelX = WIDTH / 5.5;
@@ -43,7 +45,7 @@ var maxAngleTreshold = 2 * Math.PI / 38 * 16;
 var numOfLaps = 4;
 var decceleration = 0.0002;
 
-function setZoneClick(chipZone) {
+/*function setZoneClick(chipZone) {
     chipZone.zone.on('pointerdown', function (pointer) {
         if (pointer.rightButtonDown()) {
             chipZone.clear();
@@ -60,17 +62,37 @@ function setZoneClick(chipZone) {
             }
         }
     });
-}
+}*/
 
 class ChipZone {
     constructor(owner, left, top, width, height, name) {
+        this.canPlay = false;
         this.name = name;
         this.zone = owner.add.zone(left, top, width, height).setOrigin(0, 0).setInteractive();
 
         this.chip = new Chip(owner, left + width / 2, top + height / 2);
         this.chip.setVisible(false);
 
-        setZoneClick(this);
+        let that = this;
+        this.zone.on('pointerdown', function (pointer) {
+            if (!that.canPlay) {
+                if (pointer.rightButtonDown()) {
+                    that.clear();
+                }
+                else if (pointer.leftButtonDown() && that.getVisible() === false) {
+                    var checkVal = that.chip.setValue(box.getText());
+                    if (checkVal !== true) {
+                        err.setText(checkVal);
+                        err.setVisible(true);
+                    }
+                    else {
+                        that.setVisible(true);
+                        err.setVisible(false);
+                    }
+                }
+            }
+        });
+        // setZoneClick(this);
 
         this.getVisible = function () { return this.chip.getVisible(); };
         this.setVisible = function (visible) { this.chip.setVisible(visible); };
@@ -163,6 +185,7 @@ class Chip {
 }
 
 function getRoulette() {
+    let totalBet = 0n;
     let betsData = [];
     let selectedFields = table.getZonesWithBets();
     selectedFields.forEach(e => {
@@ -171,18 +194,19 @@ function getRoulette() {
             bet: e.getValue().toString()
         };
         betsData.push(fieldObj);
+        totalBet += e.getValue();
     });
 
     let bets = JSON.stringify({
         bets: betsData
     });
-
+    
     $.ajax({
         method: "POST",
         url: reqUrl + "REST/getRoulette.php",
         dataType: "text",
         headers: {
-            "Authorization": "Basic " + btoa("username:password")
+            "Authorization": "Basic " + btoa(username + ":" + password)
         },
         data: bets,
         success: function (data, status, xhr) {
@@ -190,13 +214,14 @@ function getRoulette() {
             rewardAmountText.setVisible(false);
             rewardAmountText.setBalance(json[0]);
             chosenField = json[1];
-            err.setVisible(false);
+            balance.decBalance(totalBet);
             wheel.startMove();
         },
         error: function (data, status, xhr) {
             err.setText("Something seems wrong, please try again.");
             err.setVisible(true);
             wheel.spun = false;
+            playBut.setText("Spin");
         }
     });
 }
@@ -236,6 +261,8 @@ class Wheel {
             }
             else {
                 this.spun = true;
+                playBut.setText("Spinning...");
+                err.setVisible(false);
                 getRoulette();
             }
         }
@@ -254,6 +281,7 @@ class Wheel {
                 this.angularSpeed = 0;
                 this.moving = false;
                 this.spun = false;
+                playBut.setText("Spin");
                 showRewardAmount();
             }
         }
@@ -345,6 +373,23 @@ class Ball {
     }
 }
 
+function authUserCallback(bogdinars) {
+    if (isNaN(bogdinars)) {
+        loadingScreen.loadingText.setText(bogdinars);
+    }
+    else {
+        balance.setBalance(bogdinars);
+        balance.setVisible(true);
+        totalBetText.setVisible(true);
+        box.setVisible(true);
+        helpText.setVisible(true);
+        clearBut.setVisible(true);
+        playBut.setVisible(true);
+        loadingScreen.setVisible(false);
+        table.canPlay = true;
+    }
+}
+
 function preload() {
     loadCoreSprites(this);
     this.load.image('wheel', 'sprites/roulette-wheel-fat-rotated.png');
@@ -361,20 +406,28 @@ function create() {
 
     table = new Table(this, WIDTH / 3 * 2, HEIGHT / 2.5);
     balance = new BalanceText(this, WIDTH, 16, "Balance: ");
-    balance.setBalance(1_000_000_000n);
+    balance.setVisible(false);
     rewardAmountText = new BalanceText(this, WIDTH, 48, "+");
     rewardAmountText.setVisible(false);
     totalBetText = new BalanceText(this, WIDTH, 80, "Total bet: ");
-    var helpText = this.add.text(60, HEIGHT - 120, "Place your bet by entering the amount and clicking on the layout:", { fontSize: '22px', fontFamily: "Arial Black", fill: '#ffffff' }).setOrigin(0, 0.5);
-    betBox = new TextBox(this, 460, HEIGHT - 57);
+    totalBetText.setVisible(false);
+    helpText = this.add.text(60, HEIGHT - 120, "Place your bet by entering the amount and clicking on the layout:", { fontSize: '22px', fontFamily: "Arial Black", fill: '#ffffff' }).setOrigin(0, 0.5);
+    helpText.setVisible(false);
+    box = new TextBox(this, 460, HEIGHT - 57);
+    box.setVisible(false);
 
-    var clearBut = new Button(this, WIDTH - 240, HEIGHT - 50, "Clear", function () { table.clearZones(); err.setVisible(false); });
-    var playBut = new Button(this, WIDTH - 240, HEIGHT - 120, "Play", function () {
-            wheel.spin();
+    clearBut = new Button(this, WIDTH - 240, HEIGHT - 50, "Clear", function () { table.clearZones(); err.setVisible(false); });
+    clearBut.setVisible(false);
+    playBut = new Button(this, WIDTH - 240, HEIGHT - 120, "Spin", function () {
+        wheel.spin();
     });
+    playBut.setVisible(false);
 
     err = new ErrorMsg(this, 640, 85, "Sample Text");
     err.setVisible(false);
+
+    loadingScreen = new LoadingScreen(this);
+    authUser(authUserCallback);
 }
 
 function update() {

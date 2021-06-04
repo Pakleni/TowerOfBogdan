@@ -30,12 +30,6 @@
         exit();
     }
 
-    echo $UserID . "\n";
-    $flag = @ascend($UserID);
-    echo $flag . "\n";
-    if(!$flag)
-    {
-        http_response_code(403);
-        exit();
-    }
+    echo json_encode(@getUser($UserID));
+
 ?>

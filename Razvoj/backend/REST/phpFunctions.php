@@ -22,8 +22,11 @@ function SQL($dbc, $sql, $bind, $params, $resNeeded, $retNeeded)
 		die("BadSQL: " . $sql);
 	}
 
-	if (!call_user_func_array("mysqli_stmt_bind_param", array_merge(array($stmt, $bind), $params))) {
-		if (strpos($sql, "?") !== false) die("Can't bind: " . $sql);
+	if(count($params) != 0)
+	{
+		if (!call_user_func_array("mysqli_stmt_bind_param", array_merge(array($stmt, $bind), $params))) {
+			if (strpos($sql, "?") !== false) die("Can't bind: " . $sql);
+		}
 	}
 
 	if (!mysqli_stmt_execute($stmt)) {
@@ -135,8 +138,8 @@ function createAccount($user, $pass, $mail)
     $hashed = hashIt($pass);
 
     $sql = <<<SQL
-		INSERT INTO User(Username, User.Password, Email)
-		VALUES (?, ?, ?)
+		INSERT INTO User(Username, User.Password, Email, VIPLevelID, BogdanFloorID)
+		VALUES (?, ?, ?, 1, 1)
 		SQL;
 
     SQL($dbc, $sql, "sss", array($user, $hashed, $mail), false, false);
@@ -191,11 +194,8 @@ function changePassword($id, $newPassword)
 	SQL($dbc, $sql, "si", array($hashed, $id), false, false);
 }
 
-//TODO Pace
 function ascend($id)
 {
-	$ret = true;
-
 	$dbc = connectToDB();
 
 	$sql = <<<SQL
@@ -210,33 +210,37 @@ function ascend($id)
 		$price = $result[0]["CostToAscendTo"];
 		$sql = <<<SQL
 			UPDATE User
-			SET User.Bogdinari = User.Bogdinari - ?
+			SET User.Bogdinari = User.Bogdinari - ?, User.BogdanFloorID = User.BogdanFloorID +1
 			WHERE User.ID = ?
 			SQL;
 
-		SQL($dbc, $sql, "ii", array($id,$price), false, false);
+		SQL($dbc, $sql, "ii", array($price, $id), false, false);
 
 		return true;
 	} else return false;
-
-	
-
-	return $ret;
 }
 
-//TODO Pace/Ognjen
 function getTop5()
 {
 	$dbc = connectToDB();
 
 	$sql = <<<SQL
-		SELECT *
+		SELECT User.Username, User.BogdanFloorID
 		FROM User
-		ORDER BY User.BogdanFloorID DESC;
+		ORDER BY User.BogdanFloorID DESC
 		LIMIT 5
 		SQL;
 	
-	return SQL($dbc, $sql, "", array(), false, true);
+
+	$retSql = SQL($dbc, $sql, "", array(), false, true);
+
+	$ret = array();
+
+	foreach ($retSql as $key => $value) {
+		array_push($ret, $value);
+	}
+
+	return $ret;
 }
 
 function getUser($id)
@@ -249,5 +253,13 @@ function getUser($id)
 		WHERE User.ID = ? AND User.VIPLevelID = VIPLevel.ID AND b1.ID = User.BogdanFloorID AND b2.ID = User.BogdanFloorID + 1
 		SQL;
 	
-	return SQL($dbc, $sql, "i", array($id), false, true);
+	$retSql = SQL($dbc, $sql, "i", array($id), false, true);
+
+	$ret = array();
+
+	foreach ($retSql[0] as $key => $value) {
+		$ret[$key] = $value;
+	}
+
+	return $ret;
 }

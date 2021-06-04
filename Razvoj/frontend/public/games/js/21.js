@@ -103,7 +103,7 @@ function startGame() {
             });
         },
         error: function (data, status, xhr) {
-            err.setText("Something seems wrong, please try again.");
+            err.setText(defaultServerErrorMessage);
             err.setVisible(true);
             betMsg.playButton.setText("Play");
             canPlay = true;
@@ -148,7 +148,7 @@ function hit() {
             });
         },
         error: function (data, status, xhr) {
-            err.setText("Something seems wrong, please try again.");
+            err.setText(defaultServerErrorMessage);
             err.setVisible(true);
             playBtns.hitButton.setText("Hit");
             playBtns.standButton.setText("Stand");
@@ -178,7 +178,7 @@ function stand() {
             dealerDraw(json, numOfCards);
         },
         error: function (data, status, xhr) {
-            err.setText("Something seems wrong, please try again.");
+            err.setText(defaultServerErrorMessage);
             err.setVisible(true);
             playBtns.hitButton.setText("Hit");
             playBtns.standButton.setText("Stand");

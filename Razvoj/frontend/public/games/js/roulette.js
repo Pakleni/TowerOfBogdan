@@ -219,7 +219,7 @@ function getRoulette() {
             wheel.startMove();
         },
         error: function (data, status, xhr) {
-            err.setText("Something seems wrong, please try again.");
+            err.setText(defaultServerErrorMessage);
             err.setVisible(true);
             wheel.spun = false;
             playBut.setText("Spin");

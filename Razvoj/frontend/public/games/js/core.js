@@ -3,8 +3,11 @@
 var WIDTH = 1280;
 var HEIGHT = 720;
 
-var reqUrl = "/";
-var username = sessionStorage.getItem("email");
+var reqUrl = "";
+var defaultServerErrorMessage = "There was a server error, please try again.";
+
+
+var username = sessionStorage.getItem("username");
 var password = sessionStorage.getItem("password");
 
 var defaultNormalTint = 0xb5a8a8;
@@ -107,6 +110,12 @@ class BalanceText {
         this.text = owner.add.text(x, y, prefix + this.balance + ' β', { fontSize: '32px', fontFamily: "Arial Black", fill: defaultRewardColor }).setOrigin(1.0, 0.5);
 
         this.setBalance = function (newBalance) {
+            if (newBalance == -1) {
+                this.balance = -1n;
+                this.text.setText(prefix + 'Infinite β');
+                return true;
+            }
+
             if (!this.isValidAmount(newBalance))
                 return "Invalid input, please enter a number.";
 
@@ -125,15 +134,17 @@ class BalanceText {
             amount = BigInt(amount);
             if (amount == 0)
                 return "Bet amount can't be zero."
-            if (amount > this.balance)
+            if (this.balance != -1 && amount > this.balance)
                 return "You don't have enough Bogdinars."
             return true;
         }
 
         this.decBalance = function (amount) {
             var retVal = this.isPossibleBet(amount);
-            if (retVal === true)
-                this.setBalance(this.balance - BigInt(amount));
+            if (retVal === true) {
+                if (this.balance != -1)
+                    this.setBalance(this.balance - BigInt(amount));
+            }
             return retVal;
         }
 
@@ -141,7 +152,8 @@ class BalanceText {
             if (!this.isValidAmount(amount))
                 return "Invalid input, please enter a number.";
 
-            this.setBalance(this.balance + BigInt(amount));
+            if (this.balance != -1)
+                this.setBalance(this.balance + BigInt(amount));
             return true;
         }
 
@@ -185,12 +197,11 @@ function loadCoreSprites(game) {
 }
 
 function authUser(callback) {
-    //TODO ako nema user i pass u session storage onda vrati da mora login
-
-    if (username === null || password === null) {
-        callback("Not logged in");
+    if (username == null || password == null) { 
+        callback("You need to be logged in to play");
         return;
     }
+
     $.ajax({
         method: "GET",
         url: reqUrl + "REST/getBogdin.php",
@@ -202,8 +213,7 @@ function authUser(callback) {
             callback(data);
         },
         error: function (data, status, xhr) {
-            callback(status);
-            //TODO specificirati errore
+            callback("Error connecting to server, please refresh the page");
         }
     });
 }

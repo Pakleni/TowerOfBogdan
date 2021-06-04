@@ -77,7 +77,7 @@ function getSlots() {
             }, 0 + Math.floor(Math.random() * 1000));
         },
         error: function (data, status, xhr) {
-            err.setText("Something seems wrong, please try again.");
+            err.setText(defaultServerErrorMessage);
             err.setVisible(true);
             neededCombo = null;
             slotsObj.spun = false;

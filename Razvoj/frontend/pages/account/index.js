@@ -1,5 +1,5 @@
 // Autor: Ognjen Bjeletic 2018/0447
-import React from "react";
+import React, { useState } from "react";
 import Title from "../../components/title";
 
 import Link from "next/link";
@@ -10,6 +10,23 @@ export function SignOut() {
   sessionStorage.removeItem("password");
   location.reload();
   return false;
+}
+function Ascend(setAscendError) {
+  const username = sessionStorage.getItem("email");
+  const pass = sessionStorage.getItem("password");
+
+  const data = { email: username, password: pass };
+
+  fetch(window.location.origin + "/REST/account/ascend.php", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  }).then((response) => {
+    if (response.status === 200) location.reload();
+    else setAscendError(true);
+  });
 }
 
 // {
@@ -23,6 +40,8 @@ export function SignOut() {
 // }
 
 export function Account() {
+  const [ascendError, setAscendError] = useState(false);
+
   const ISSERVER = typeof window === "undefined";
 
   let isLogged = false;
@@ -74,7 +93,19 @@ export function Account() {
       </Link>
       <br />
       <br />
-      <button className="button is-primary" id="ascension"></button>
+      <button
+        className="button is-primary"
+        id="ascension"
+        onClick={() => Ascend(setAscendError)}
+      ></button>
+      {ascendError === true && (
+        <div>
+          <br />
+          <div className="notification is-danger is-light">
+            <p className="title is-6">Ascension failed</p>
+          </div>
+        </div>
+      )}
     </div>
   );
   return (

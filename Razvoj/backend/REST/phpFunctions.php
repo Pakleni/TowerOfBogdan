@@ -196,6 +196,30 @@ function ascend($id)
 {
 	$ret = true;
 
+	$dbc = connectToDB();
+
+	$sql = <<<SQL
+		SELECT BogdanFloor.CostToAscendTo
+		FROM User, BogdanFloor
+		WHERE User.ID = ? AND BogdanFloor.ID = User.BogdanFloorID + 1 AND User.Bogdinari >= BogdanFloor.CostToAscendTo
+		SQL;
+
+    $result = SQL($dbc, $sql, "i", array($id), false, true);
+
+	if (count($result) > 0) {
+		$price = $result[0]["CostToAscendTo"];
+		$sql = <<<SQL
+			UPDATE User
+			SET User.Bogdinari = User.Bogdinari - ?
+			WHERE User.ID = ?
+			SQL;
+
+		SQL($dbc, $sql, "ii", array($id,$price), false, false);
+
+		return true;
+	} else return false;
+
+	
 
 	return $ret;
 }
@@ -203,5 +227,27 @@ function ascend($id)
 //TODO Pace/Ognjen
 function getTop5()
 {
+	$dbc = connectToDB();
+
+	$sql = <<<SQL
+		SELECT *
+		FROM User
+		ORDER BY User.BogdanFloorID DESC;
+		LIMIT 5
+		SQL;
 	
+	return SQL($dbc, $sql, "", array(), false, true);
+}
+
+function getUser($id)
+{
+	$dbc = connectToDB();
+
+	$sql = <<<SQL
+		SELECT User.Username, User.Email, User.Bogdinari, VIPLevel.Name, b1.Name AS FloorName, b1.CostToStay AS CostToStay, b2.CostToAscendTo AS CostToNext
+		FROM User, VIPLevel, BogdanFloor b1, BogdanFloor b2
+		WHERE User.ID = ? AND User.VIPLevelID = VIPLevel.ID AND b1.ID = User.BogdanFloorID AND b2.ID = User.BogdanFloorID + 1
+		SQL;
+	
+	return SQL($dbc, $sql, "i", array($id), false, true);
 }

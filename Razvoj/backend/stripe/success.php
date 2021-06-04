@@ -1,7 +1,11 @@
 <?php
 
+require_once "../REST/phpFunctions.php";
+
 $hash = $_REQUEST["hash"];
 $amount = $_REQUEST["amount"];
+
+setBogdinarHesh($hash, $amount);
 
 ?>
 <html>
@@ -12,8 +16,8 @@ $amount = $_REQUEST["amount"];
 <body>
   <section>
     <p>
-      We appreciate your business! If you have any questions, please email
-      <a href="mailto:orders@example.com">orders@example.com</a>.
+      We appreciate your business!
+      <a href="">Go Back</a>.
     </p>
   </section>
 </body>

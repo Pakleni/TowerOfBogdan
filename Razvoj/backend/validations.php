@@ -3,10 +3,12 @@
     require_once "REST/phpFunctions.php";
 
     $UserID = -1;
+    $Admin = false;
 
     function auth()
     {
         global $UserID;
+        global $Admin;
 
         if(!isset($_SERVER["PHP_AUTH_PW"]) || !isset($_SERVER["PHP_AUTH_USER"]))
         {
@@ -25,11 +27,17 @@
             http_response_code(401);
             exit();
         }
+
+        $Admin = @getVip($UserID) == 5;
     }
 
     function betAmmountInRange($arg)
     {
         global $UserID;
+        global $Admin;
+
+        if($Admin)
+            return;
 
         if(!isset($arg) || getBogdin($UserID) < $arg)
         {

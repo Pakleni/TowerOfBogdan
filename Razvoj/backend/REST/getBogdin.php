@@ -16,5 +16,8 @@
 
     @auth();
 
-    echo @getBogdin($UserID);
+    if($Admin)
+        echo -1;
+    else
+        echo @getBogdin($UserID);
 ?>

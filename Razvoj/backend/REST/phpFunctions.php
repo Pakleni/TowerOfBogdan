@@ -243,6 +243,22 @@ function getTop5()
 	return $ret;
 }
 
+function getVip($id)
+{
+	$dbc = connectToDB();
+
+	$sql = <<<SQL
+		SELECT User.VIPLevelID
+		FROM User
+		WHERE User.ID = ?
+		SQL;
+	
+
+	$retSql = SQL($dbc, $sql, "i", array($id), false, true);
+
+	return $retSql[0]["VIPLevelID"];
+}
+
 function getUser($id)
 {
 	$dbc = connectToDB();

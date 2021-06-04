@@ -29,7 +29,8 @@
         $game = new Slots();
         $reward = $game->getReward($_REQUEST["bet"]);
         $generatedSymbols = $game->getSymbols();
-        @updateBogdin($UserID, $reward[0] - $_REQUEST["bet"]);
+        if(!$Admin)
+            @updateBogdin($UserID, $reward[0] - $_REQUEST["bet"]);
 
         $answer = array($reward, $generatedSymbols);
         echo json_encode($answer);

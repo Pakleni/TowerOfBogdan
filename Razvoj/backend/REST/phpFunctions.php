@@ -296,7 +296,7 @@ function getHash($id){
 		WHERE User.ID = ?
 		SQL;
 	
-	$retSql = SQL($dbc, $sql, "si", array($str,$id), false, false);
+	SQL($dbc, $sql, "si", array($str,$id), false, false);
 
 	return $str;
 }
@@ -315,10 +315,17 @@ function setBogdinarHesh($hash, $amount)
 
 	$result = SQL($dbc, $sql, "s", array($hash), false, true);
 	
-	
 	if (count($result) > 0) {
 		$row = $result[0];
 		$playerID = $row['ID'];
+
+		$sql = <<<SQL
+			UPDATE User
+			SET User.paymentHash = ?
+			WHERE User.ID = ?
+			SQL;
+		
+		SQL($dbc, $sql, "si", array("",$playerID), false, false);
 
 		updateBogdin($playerID, $amount);
 	}

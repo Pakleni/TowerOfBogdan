@@ -1,16 +1,45 @@
 // Autor: Ognjen Bjeletic 2018/0447
 import React from "react";
+import ReactDOM from "react-dom";
+
 import Title from "../../components/title";
 
-const leaders = [
-  { user: "Pakleni", points: 1983249 },
-  { user: "Dinca", points: 4 },
-  { user: "Mehovic", points: 3 },
-  { user: "Pace", points: 2 },
-  { user: "David", points: -1 },
-];
+// const primer = [
+//   { Username: "Pakleni", BogdanFloorID: 1983249 },
+//   { Username: "Dinca", BogdanFloorID: 4 },
+//   { Username: "Mehovic", BogdanFloorID: 3 },
+//   { Username: "Pace", BogdanFloorID: 2 },
+//   { Username: "David", BogdanFloorID: -1 },
+// ];
 
-export default function Leaderboard() {
+function Leaderboard() {
+  const rows = [];
+
+  const ISSERVER = typeof window === "undefined";
+
+  if (!ISSERVER) {
+    fetch(window.location.origin + "/REST/getRanking.php", {
+      method: "GET",
+    })
+      .then((response) => {
+        if (response.status === 200) return response.json();
+        else return [];
+      })
+      .then((data) => {
+        const leaders = data;
+        leaders.map((x, index) => {
+          rows.push(
+            <tr key={x.Username}>
+              <th>{index + 1}.</th>
+              <td>{x.Username}</td>
+              <td className="has-text-right">{x.BogdanFloorID}</td>
+            </tr>
+          );
+        });
+        ReactDOM.render(rows, document.getElementById("leader-body"));
+      });
+  }
+
   return (
     <div className="container">
       <Title title="Leaderboard"></Title>
@@ -25,20 +54,11 @@ export default function Leaderboard() {
               <th className="has-text-right">Floor reached</th>
             </tr>
           </thead>
-
-          <tbody>
-            {leaders.map((x, index) => {
-              return (
-                <tr key={x.user}>
-                  <th>{index + 1}.</th>
-                  <td>{x.user}</td>
-                  <td className="has-text-right">{x.points}</td>
-                </tr>
-              );
-            })}
-          </tbody>
+          <tbody id="leader-body"></tbody>
         </table>
       </div>
     </div>
   );
 }
+
+export default Leaderboard;

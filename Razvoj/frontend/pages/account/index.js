@@ -12,23 +12,53 @@ export function SignOut() {
   return false;
 }
 
-export default function Account() {
+// {
+//   "Username": "Pakleni",
+//   "Email": "ognjenbjel@protonmail.com",
+//   "Bogdinari": 0,
+//   "Name": "Registrovan Korisnik",
+//   "FloorName": "Siroce",
+//   "CostToStay": 0,
+//   "CostToNext": 1000
+// }
+
+export function Account() {
   const ISSERVER = typeof window === "undefined";
 
   let isLogged = false;
 
   let username = null;
-  let ranking = null;
-  let bogdinars = null;
-  let ascension = null;
-  let floor = null;
 
   if (!ISSERVER) {
     // Access sessionStorage
     username = sessionStorage.getItem("email");
     if (username !== null) {
       isLogged = true;
-      // axios request
+
+      const pass = sessionStorage.getItem("password");
+
+      const data = { email: username, password: pass };
+
+      fetch(window.location.origin + "/REST/account/getUserInfo.php", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+        .then((response) => {
+          if (response.status === 200) return response.json();
+          else return {};
+        })
+        .then((data) => {
+          document.getElementById("cost").innerHTML = `${data.CostToStay}β`;
+          document.getElementById("bogdinars").innerHTML = `${data.Bogdinari}β`;
+          document.getElementById(
+            "ascension"
+          ).innerHTML = `Ascend [${data.CostToNext}β]`;
+
+          document.getElementById("floor").innerHTML = data.FloorName;
+        });
     }
   }
 
@@ -44,7 +74,7 @@ export default function Account() {
       </Link>
       <br />
       <br />
-      <button className="button is-primary">{`Ascend [${ascension}β]`}</button>
+      <button className="button is-primary" id="ascension"></button>
     </div>
   );
   return (
@@ -67,16 +97,16 @@ export default function Account() {
                       <p className="subtitle">
                         <table>
                           <tr>
-                            <th>Leaderboard Pos</th>
-                            <th className="has-text-right">{ranking}</th>
-                          </tr>
-                          <tr>
                             <th>Bogdinars</th>
-                            <th className="has-text-right">{bogdinars}β</th>
+                            <th className="has-text-right" id="bogdinars"></th>
                           </tr>
                           <tr>
                             <th>Current Floor</th>
-                            <th className="has-text-right">{floor}</th>
+                            <th className="has-text-right" id="floor"></th>
+                          </tr>
+                          <tr>
+                            <th>This weeks Bogdan tax</th>
+                            <th className="has-text-right" id="cost"></th>
                           </tr>
                         </table>
                       </p>
@@ -113,3 +143,5 @@ export default function Account() {
     </div>
   );
 }
+
+export default Account;

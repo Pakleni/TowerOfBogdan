@@ -279,3 +279,47 @@ function getUser($id)
 
 	return $ret;
 }
+
+function getHash($id){
+	$seed = str_split('abcdefghijklmnopqrstuvwxyz'.'ABCDEFGHIJKLMNOPQRSTUVWXYZ');
+
+	$str = "";
+	for($i = 0; $i < 256; $i++){
+		$str += $seed[random_int(0, count($seed) - 1)];
+	}
+
+	$dbc = connectToDB();
+
+	$sql = <<<SQL
+		UPDATE User
+		SET User.paymentHash = ?
+		WHERE User.ID = ?
+		SQL;
+	
+	$retSql = SQL($dbc, $sql, "si", array($str,$id), false, false);
+
+	return $str;
+}
+
+function setBogdinarHesh($hash, $amount)
+{
+	$playerID = -1;
+
+	$dbc = connectToDB();
+
+	$sql = <<<SQL
+		SELECT *
+		FROM User
+		WHERE User.paymentHash = ?
+		SQL;
+
+	$result = SQL($dbc, $sql, "s", array($hash), false, true);
+	
+	
+	if (count($result) > 0) {
+		$row = $result[0];
+		$playerID = $row['ID'];
+
+		updateBogdin($playerID, $amount);
+	}
+}

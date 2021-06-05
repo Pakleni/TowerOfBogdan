@@ -29,6 +29,11 @@ if($user == null)
   exit();
 }
 
+$vipid = $data->viplevel;
+
+$name = @vip::getVIPName($vipid);
+$price = @vip::getVIPPrice($vipid);
+
 $hash = "";
 
 $hash = @$user->setRandomHash();
@@ -40,16 +45,16 @@ if($hash != ""){
     'line_items' => [[
       'price_data' => [
         'currency' => 'usd',
-        'unit_amount' => 2000,
+        'unit_amount' => $price*100,
         'product_data' => [
-          'name' => 'VIP',
+          'name' => 'VIP: '.$name,
           'images' => [""],
         ],
       ],
       'quantity' => 1,
     ]],
     'mode' => 'payment',
-    'success_url' => $YOUR_DOMAIN . '/success.php?viplevel='.$data->viplevel.'&hash='.$hash,
+    'success_url' => $YOUR_DOMAIN . '/success.php?viplevel='.$vipid.'&hash='.$hash,
     'cancel_url' => $YOUR_DOMAIN . '/cancel.php',
   ]);
   

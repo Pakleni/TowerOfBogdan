@@ -1,5 +1,49 @@
 <?php
 
+    class vip{
+        public static function getVIPName($vipid)
+        {
+            $dbc = User::connectToDB();
+
+            $sql = <<<SQL
+                SELECT Name
+                FROM VIPLevel
+                WHERE VIPLevel.ID = ?
+                SQL;
+            
+            $result = User::SQL($dbc, $sql, "i", array($vipid), false, true);
+
+            if (count($result) > 0)
+            {
+                $row = $result[0];
+                return $row["Name"];
+            }
+
+            return null;
+        }
+        
+        public static function getVIPPrice($vipid)
+        {
+            $dbc = User::connectToDB();
+
+            $sql = <<<SQL
+                SELECT Cost
+                FROM VIPLevel
+                WHERE VIPLevel.ID = ?
+                SQL;
+            
+            $result = User::SQL($dbc, $sql, "i", array($vipid), false, true);
+
+            if (count($result) > 0)
+            {
+                $row = $result[0];
+                return $row["Cost"];
+            }
+
+            return null;
+        }
+    }
+
     class User
     {
 
@@ -17,7 +61,7 @@
             return password_hash(User::pepper($pass), PASSWORD_ARGON2ID);
         }
 
-        private static function connectToDB()
+        public static function connectToDB()
         {
             $user = 'bogdan';
             $pass = 'glupasifra';
@@ -27,7 +71,7 @@
             return $dbc;
         }
 
-        private static function SQL($dbc, $sql, $bind, $params, $resNeeded, $retNeeded)
+        public static function SQL($dbc, $sql, $bind, $params, $resNeeded, $retNeeded)
         {
             $stmt = mysqli_stmt_init($dbc);
             if (!mysqli_stmt_prepare($stmt, $sql))
@@ -202,6 +246,19 @@
                 SQL;
                 
             User::SQL($dbc, $sql, "sis", array("", $amount, $hash), false, false);
+        }
+
+        static function payWithHashVIP($hash, $viplevel)
+        {
+            $dbc = User::connectToDB();
+
+            $sql = <<<SQL
+                UPDATE User
+                SET User.paymentHash = ?, User.VIPLevelID = ?
+                WHERE User.paymentHash = ?
+                SQL;
+                
+            User::SQL($dbc, $sql, "sis", array("", $viplevel, $hash), false, false);
         }
 
         function getID()

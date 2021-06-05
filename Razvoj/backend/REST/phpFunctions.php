@@ -287,13 +287,21 @@
         {
             $dbc = User::connectToDB();
 
+            $tmp = $amount;
+
+            if($tmp > 0)
+            {
+                $vipLevel = $this->getVip();
+                $tmp = floor($tmp * pow(1.1, $vipLevel - 1));
+            }
+
             $sql = <<<SQL
                 UPDATE User
                 SET Bogdinari = Bogdinari + ?
                 WHERE User.ID = ?
                 SQL;
 
-                User::SQL($dbc, $sql, "ii", array($amount,$this->userID), false, false);
+            User::SQL($dbc, $sql, "ii", array($tmp,$this->userID), false, false);
 
             mysqli_close($dbc);
         }

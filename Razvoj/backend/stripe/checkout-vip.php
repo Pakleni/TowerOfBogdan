@@ -38,6 +38,11 @@ $hash = "";
 
 $hash = @$user->setRandomHash();
 
+if($vipid <= @$user->getVip()){
+  http_response_code(400);
+  exit();
+}
+
 $YOUR_DOMAIN = 'http://localhost';
 if($hash != ""){
   $checkout_session = \Stripe\Checkout\Session::create([

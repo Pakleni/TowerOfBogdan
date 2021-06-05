@@ -25,6 +25,6 @@ if(isset($_REQUEST["viplevel"]))
   User::payWithHashVIP($hash, $viplevel);
 }
 
-header("Location: https://tower-of-bogdan.vercel.app/success");
+header("Location: " . $HOST . "success");
 exit();
 ?>

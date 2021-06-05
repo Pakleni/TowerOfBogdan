@@ -53,6 +53,8 @@ if($vipid <= @$user->getVip()){
   exit();
 }
 
+
+
 if($hash != ""){
   $checkout_session = \Stripe\Checkout\Session::create([
     'payment_method_types' => ['card'],
@@ -62,14 +64,14 @@ if($hash != ""){
         'unit_amount' => $price*100,
         'product_data' => [
           'name' => 'VIP: '.$name,
-          'images' => ["http://localhost/logo.png"],
+          'images' => [$HOST . "logo.png"],
         ],
       ],
       'quantity' => 1,
     ]],
     'mode' => 'payment',
-    'success_url' => 'https://database.mandrakestudios.net/htdocs/bogdani/stripe/success.php?viplevel='.$vipid.'&hash='.$hash,
-    'cancel_url' => 'https://tower-of-bogdan.vercel.app/cancel',
+    'success_url' => $DATABASE . 'stripe/success.php?viplevel='.$vipid.'&hash='.$hash,
+    'cancel_url' => $HOST . 'cancel',
   ]);
   http_response_code(200);
   echo json_encode(['id' => $checkout_session->id]);

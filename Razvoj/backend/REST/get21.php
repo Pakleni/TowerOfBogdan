@@ -17,6 +17,7 @@
     if($_SERVER["REQUEST_METHOD"] != "POST")
     {
         http_response_code(400);
+        echo("Method not POST");
         exit();
     }
 
@@ -25,6 +26,7 @@
     if(!isset($_REQUEST["operation"]))
     {
         http_response_code(400);
+        echo("no operation");
         exit();
     }
 

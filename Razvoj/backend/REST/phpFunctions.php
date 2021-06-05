@@ -1,5 +1,8 @@
 <?php
 
+    $DATABASE = "https://database.mandrakestudios.net/htdocs/bogdani/";
+    $HOST = "https://tower-of-bogdan.vercel.app/";
+    
     class vip{
         public static function getVIPName($vipid)
         {

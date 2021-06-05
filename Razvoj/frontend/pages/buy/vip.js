@@ -10,11 +10,8 @@ function Buy(stripe, level, errorSetter) {
 
   const data = { email: username, password: pass, viplevel: level };
 
-  fetch("/stripe/checkout-vip.php", {
+  fetch(process.env.host + "/stripe/checkout-vip.php", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify(data),
   })
     .then(function (response) {

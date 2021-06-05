@@ -2,7 +2,6 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useState } from "react";
 import Title from "../../components/title";
-import axios from "axios";
 
 import { useForm } from "react-hook-form";
 
@@ -23,20 +22,19 @@ function Register() {
   const reg = async (data) => {
     try {
       setIsLoading(true);
-      const response = await axios.post(
-        process.env.host + "/REST/account/register.php",
-        data,
-        {
-          timeout: 60000,
+
+      fetch(process.env.host + "/REST/account/register.php", {
+        method: "POST",
+        body: JSON.stringify(data),
+      }).then(function (response) {
+        const code = response.status;
+        setErrorCode(code);
+        if (code === 200) {
+          setSuccess(true);
+        } else if (code === 203) {
+          setSuccess(false);
         }
-      );
-      const code = response.status;
-      setErrorCode(code);
-      if (code === 200) {
-        setSuccess(true);
-      } else if (code === 203) {
-        setSuccess(false);
-      }
+      });
     } catch (err) {
       setSuccess(false);
     }

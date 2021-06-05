@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import Title from "../../components/title";
-import axios from "axios";
 
 import { useForm } from "react-hook-form";
 
@@ -37,22 +36,21 @@ function Login() {
   const reg = async (data) => {
     try {
       setIsLoading(true);
-      const response = await axios.post(
-        process.env.host + "/REST/account/login.php",
-        data,
-        {
-          timeout: 60000,
+
+      fetch(process.env.host + "/REST/account/login.php", {
+        method: "POST",
+        body: JSON.stringify(data),
+      }).then(function (response) {
+        const code = response.status;
+        if (code === 200) {
+          sessionStorage.setItem("email", data.email);
+          sessionStorage.setItem("password", data.password);
+          router.push("/");
+          setSuccess(true);
+        } else {
+          setSuccess(false);
         }
-      );
-      const code = response.status;
-      if (code === 200) {
-        sessionStorage.setItem("email", data.email);
-        sessionStorage.setItem("password", data.password);
-        router.push("/");
-        setSuccess(true);
-      } else {
-        setSuccess(false);
-      }
+      });
     } catch (err) {
       setSuccess(false);
     }

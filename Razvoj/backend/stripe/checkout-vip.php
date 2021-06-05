@@ -1,10 +1,11 @@
 <?php
+header("Access-Control-Allow-Origin:*");
+header('Content-Type: application/json');
 
 require_once "../REST/phpFunctions.php";
 require_once 'stripe-php-7.81.0/init.php';
 \Stripe\Stripe::setApiKey('sk_test_4eC39HqLyjWDarjtT1zdp7dc');
 
-header('Content-Type: application/json');
 
 if($_SERVER["REQUEST_METHOD"] != "POST")
 {

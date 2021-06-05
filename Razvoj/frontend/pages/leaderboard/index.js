@@ -18,7 +18,7 @@ function Leaderboard() {
   const ISSERVER = typeof window === "undefined";
 
   if (!ISSERVER) {
-    fetch(window.location.origin + "/REST/getRanking.php", {
+    fetch(process.env.host + "/REST/getRanking.php", {
       method: "GET",
     })
       .then((response) => {

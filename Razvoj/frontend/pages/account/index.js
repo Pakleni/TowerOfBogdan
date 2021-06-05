@@ -17,11 +17,8 @@ function Ascend(setAscendError) {
 
   const data = { email: username, password: pass };
 
-  fetch(window.location.origin + "/REST/account/ascend.php", {
+  fetch(process.env.host + "/REST/account/ascend.php", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify(data),
   }).then((response) => {
     if (response.status === 200) location.reload();
@@ -59,11 +56,8 @@ export function Account() {
 
       const data = { email: username, password: pass };
 
-      fetch(window.location.origin + "/REST/account/getUserInfo.php", {
+      fetch(process.env.host + "/REST/account/getUserInfo.php", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify(data),
       })
         .then((response) => {

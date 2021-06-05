@@ -10,11 +10,8 @@ function Buy(stripe, amount) {
 
   const data = { email: username, password: pass, amount: amount };
 
-  fetch("/stripe/checkout-bogdinars.php", {
+  fetch(process.env.host + "/stripe/checkout-bogdinars.php", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify(data),
   })
     .then(function (response) {

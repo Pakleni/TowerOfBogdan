@@ -248,7 +248,7 @@
                 WHERE User.paymentHash = ?
                 SQL;
                 
-            User::SQL($dbc, $sql, "sis", array($amount, $hash), false, false);
+            User::SQL($dbc, $sql, "is", array($amount, $hash), false, false);
         }
 
         static function payWithHashVIP($hash, $viplevel)

@@ -15,7 +15,7 @@ if($_SERVER["REQUEST_METHOD"] != "POST")
 $json = file_get_contents('php://input');
 $data = json_decode($json);
 
-if(!isset($data->email) || !isset($data->password))
+if(!isset($data->email) || !isset($data->password) || !isset($data->viplevel))
 {
 	http_response_code(400);
 	exit();
@@ -42,14 +42,14 @@ if($hash != ""){
         'currency' => 'usd',
         'unit_amount' => 2000,
         'product_data' => [
-          'name' => 'Stubborn Attachments',
-          'images' => ["https://i.imgur.com/EHyR2nP.png"],
+          'name' => 'VIP',
+          'images' => [""],
         ],
       ],
       'quantity' => 1,
     ]],
     'mode' => 'payment',
-    'success_url' => $YOUR_DOMAIN . '/success.php?amount=1000&hash='.$hash,
+    'success_url' => $YOUR_DOMAIN . '/success.php?viplevel='.$data->viplevel.'&hash='.$hash,
     'cancel_url' => $YOUR_DOMAIN . '/cancel.php',
   ]);
   

@@ -32,11 +32,12 @@ function Ascend(setAscendError) {
 // {
 //   "Username": "Pakleni",
 //   "Email": "ognjenbjel@protonmail.com",
-//   "Bogdinari": 0,
-//   "Name": "Registrovan Korisnik",
-//   "FloorName": "Siroce",
-//   "CostToStay": 0,
-//   "CostToNext": 1000
+//   "Bogdinari": 19496,
+//   "VipName": "VIP 3",
+//   "FloorNumber": 4,
+//   "FloorName": "Macka",
+//   "CostToStay": 23000,
+//   "CostToNext": 806764
 // }
 
 export function Account() {
@@ -76,8 +77,10 @@ export function Account() {
             "ascension"
           ).innerHTML = `Ascend [${data.CostToNext}β]`;
 
-          document.getElementById("floor").innerHTML = data.FloorName;
-          document.getElementById("level").innerHTML = data.Name;
+          document.getElementById(
+            "floor"
+          ).innerHTML = `${data.FloorName}[${data.FloorNumber}]`;
+          document.getElementById("level").innerHTML = data.VipName;
         });
     }
   }

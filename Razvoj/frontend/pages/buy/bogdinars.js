@@ -57,20 +57,38 @@ export default function Bogdinars() {
           <h1 className="title is-1-3">Choose Amount:</h1>
         </div>
         <div className="is-align-self-center">
-          <button className="button title is-3-5 is-info">{`${1000}β`}</button>
+          <button
+            className="button title is-3-5 is-info"
+            onClick={() =>
+              // eslint-disable-next-line no-undef
+              Buy(Stripe(process.env.host), 1000)
+            }
+          >{`${1000}β`}</button>
         </div>
         <div className="is-align-self-center">
-          <button className="button title is-3-5 is-success">{`${5000}β`}</button>
+          <button
+            className="button title is-3-5 is-success"
+            onClick={() =>
+              // eslint-disable-next-line no-undef
+              Buy(Stripe(process.env.host), 5000)
+            }
+          >{`${5000}β`}</button>
         </div>
         <div className="is-align-self-center">
-          <button className="button title is-3-5 is-warning">{`${10000}β`}</button>
+          <button
+            className="button title is-3-5 is-warning"
+            onClick={() =>
+              // eslint-disable-next-line no-undef
+              Buy(Stripe(process.env.host), 10000)
+            }
+          >{`${10000}β`}</button>
         </div>
         <div className="is-align-self-center">
           <button
             className="button title is-3-5 is-danger"
             onClick={() =>
               // eslint-disable-next-line no-undef
-              Buy(Stripe("pk_test_TYooMQauvdEDq54NiTphI7jx"), 50000)
+              Buy(Stripe(process.env.host), 50000)
             }
           >{`${50000}β`}</button>
         </div>

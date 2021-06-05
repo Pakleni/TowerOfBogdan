@@ -31,6 +31,11 @@ if($user == null)
 
 $vipid = $data->viplevel;
 
+if($vipid <= 1 || $vipid >= 5){
+  http_response_code(401);
+  exit();
+}
+
 $name = @vip::getVIPName($vipid);
 $price = @vip::getVIPPrice($vipid);
 
@@ -39,7 +44,7 @@ $hash = "";
 $hash = @$user->setRandomHash();
 
 if($vipid <= @$user->getVip()){
-  http_response_code(400);
+  http_response_code(202);
   exit();
 }
 

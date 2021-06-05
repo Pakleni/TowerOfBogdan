@@ -12,6 +12,8 @@ var config = {
     }
 };
 
+var sessionId = "";
+
 var balance;
 var rewardAmmountText;
 var err;
@@ -48,7 +50,8 @@ function keepAlive() {
             "Authorization": "Basic " + btoa(username + ":" + password)
         },
         data: {
-            operation: "keepalive"
+            operation: "keepalive",
+            sessionId: sessionId
         }
     });
 }
@@ -84,6 +87,7 @@ function startGame() {
         },
         success: function (data, status, xhr) {
             let json = JSON.parse(data);
+            sessionId = json[3];
             betMsg.setVisible(false);
             playerHand.setVisible(true);
             dealerHand.setVisible(true);
@@ -136,12 +140,11 @@ function hit() {
             "Authorization": "Basic " + btoa(username + ":" + password)
         },
         data: {
-            operation: "hit"
+            operation: "hit",
+            sessionId: sessionId
         },
         success: function (data, status, xhr) {
             let json = JSON.parse(data);
-            console.log(json);
-
             playerHand.addCard(json[1][0][json[1][0].length - 1], function () {
                 let numOfCards = json[1][1].length - dealerHand.numOfCards;
                 dealerDraw(json, numOfCards);
@@ -168,11 +171,11 @@ function stand() {
             "Authorization": "Basic " + btoa(username + ":" + password)
         },
         data: {
-            operation: "stand"
+            operation: "stand",
+            sessionId: sessionId
         },
         success: function (data, status, xhr) {
             let json = JSON.parse(data);
-            console.log(json);
 
             let numOfCards = json[1][1].length - dealerHand.numOfCards;
             dealerDraw(json, numOfCards);
@@ -391,7 +394,8 @@ $(window).on("unload", function () {
             "Authorization": "Basic " + btoa(username + ":" + password)
         },
         data: {
-            operation: "end"
+            operation: "end",
+            sessionId: sessionId
         }
     });
 });

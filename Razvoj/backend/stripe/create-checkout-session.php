@@ -2,7 +2,7 @@
 
 require_once "../REST/phpFunctions.php";
 require_once 'stripe-php-7.81.0/init.php';
-\Stripe\Stripe::setApiKey('pk_test_51Iyja9DJfCOBmzFRwxGD3kkMp3S8vhWHQngTKeZ4iVU6cN35KuhjZgrRcweJvVGzc4OChqkjhpVSlS0ACOwANj3b00C3PAtbtA');
+\Stripe\Stripe::setApiKey('sk_test_51Iyja9DJfCOBmzFRGES8wim8nMYToD5kL3A4LRlAs3nKFwtw8kyk28CWKkpnODBnm6icV1Cf3IJnoTvdV6vEswtJ00OuzRE62j');
 
 header('Content-Type: application/json');
 

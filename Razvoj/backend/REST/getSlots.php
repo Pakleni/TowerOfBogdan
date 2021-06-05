@@ -32,7 +32,7 @@
         if(!$Admin)
             @$user->addBogdin($reward[0] - $_REQUEST["bet"]);
 
-        $answer = array($reward, $generatedSymbols);
+        $answer = array(floor($reward*pow(1.1,$user->getVip() - 1), $generatedSymbols));
         echo json_encode($answer);
     }
     catch(Exception $e)

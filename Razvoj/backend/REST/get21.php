@@ -105,7 +105,7 @@
             if(!$Admin)
                 @$user->addBogdin($game->getReward($bet));
         }
-        echo json_encode(array($game->getWinner(),$game->getState(),$game->getReward($bet)));
+        echo json_encode(array($game->getWinner(),$game->getState(),floor($game->getReward($bet)*pow(1.1,$user->getVip() - 1))));
     }
     catch(Exception $e)
     {

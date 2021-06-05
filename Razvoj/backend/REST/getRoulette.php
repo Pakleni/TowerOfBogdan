@@ -56,7 +56,7 @@
         if(!$Admin)
             @$user->addBogdin($reward - $allBets);
 
-        $answer = array($reward, $num);
+        $answer = array(floor($reward*pow(1.1,$user->getVip() - 1)), $num);
         echo json_encode($answer);
     }
     catch(Exception $e)

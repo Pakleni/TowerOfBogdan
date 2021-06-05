@@ -77,6 +77,7 @@ export function Account() {
           ).innerHTML = `Ascend [${data.CostToNext}β]`;
 
           document.getElementById("floor").innerHTML = data.FloorName;
+          document.getElementById("level").innerHTML = data.Name;
         });
     }
   }
@@ -127,6 +128,10 @@ export function Account() {
                     <div className="media-content">
                       <p className="subtitle">
                         <table>
+                          <tr>
+                            <th>Account Level</th>
+                            <th className="has-text-right" id="level"></th>
+                          </tr>
                           <tr>
                             <th>Bogdinars</th>
                             <th className="has-text-right" id="bogdinars"></th>

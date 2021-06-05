@@ -48,7 +48,7 @@ if($hash != ""){
         'unit_amount' => $price*100,
         'product_data' => [
           'name' => 'VIP: '.$name,
-          'images' => [""],
+          'images' => ["http://localhost/logo.png"],
         ],
       ],
       'quantity' => 1,

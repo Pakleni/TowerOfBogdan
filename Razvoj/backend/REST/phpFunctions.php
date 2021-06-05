@@ -385,7 +385,7 @@
             $dbc = User::connectToDB();
 
             $sql = <<<SQL
-                SELECT User.Username, User.Email, User.Bogdinari, VIPLevel.Name, b1.Name AS FloorName, b1.CostToStay AS CostToStay, b2.CostToAscendTo AS CostToNext
+                SELECT User.Username, User.Email, User.Bogdinari, VIPLevel.Name AS VipName, b1.ID AS FloorNumber, b1.Name AS FloorName, b1.CostToStay AS CostToStay, b2.CostToAscendTo AS CostToNext
                 FROM User, VIPLevel, BogdanFloor b1, BogdanFloor b2
                 WHERE User.ID = ? AND User.VIPLevelID = VIPLevel.ID AND b1.ID = User.BogdanFloorID AND b2.ID = User.BogdanFloorID + 1
                 SQL;

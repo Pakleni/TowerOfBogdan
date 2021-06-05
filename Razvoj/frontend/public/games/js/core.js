@@ -3,7 +3,7 @@
 var WIDTH = 1280;
 var HEIGHT = 720;
 
-var reqUrl = "/";
+var reqUrl = "https://database.mandrakestudios.net/htdocs/bogdani/";
 var defaultServerErrorMessage = "There was a server error, please try again.";
 
 

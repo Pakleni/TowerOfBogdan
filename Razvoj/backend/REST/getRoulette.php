@@ -54,7 +54,7 @@
         $reward = $game->getReward($data->bets);
         $num = $game->getNum();
         if(!$Admin)
-            @updateBogdin($UserID, $reward - $allBets);
+            @$user->addBogdin($reward - $allBets);
 
         $answer = array($reward, $num);
         echo json_encode($answer);

@@ -50,7 +50,7 @@
 
                 @betAmmountInRange($_REQUEST["bet"]);
                 if(!$Admin)
-                    @updateBogdin($UserID, -$_REQUEST["bet"]);
+                    @$user->addBogdin(-$_REQUEST["bet"]);
 
                 $_SESSION["started"] = true;
                 $game = new Game21(null);
@@ -103,7 +103,7 @@
         {
             session_destroy();
             if(!$Admin)
-                @updateBogdin($UserID, $game->getReward($bet));
+                @$user->addBogdin($game->getReward($bet));
         }
         echo json_encode(array($game->getWinner(),$game->getState(),$game->getReward($bet)));
     }

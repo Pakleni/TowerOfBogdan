@@ -22,13 +22,13 @@
         exit();
     }
 
-    $UserID = @getId($data->email, $data->password);
+    $user = @User::getUserWithEmailPassword($data->email, $data->password);
 
-    if($UserID == -1)
+    if($user == null)
     {
-        http_response_code(400);
+        http_response_code(401);
         exit();
     }
 
-    @changePassword($UserID, $data->new_password)
+    @$user->changePassword($data->new_password)
 ?>

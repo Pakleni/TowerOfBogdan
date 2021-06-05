@@ -5,7 +5,7 @@ require_once "../REST/phpFunctions.php";
 $hash = $_REQUEST["hash"];
 $amount = $_REQUEST["amount"];
 
-setBogdinarHesh($hash, $amount);
+User::payWithHash($hash, $amount);
 
 ?>
 <html>

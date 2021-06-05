@@ -22,17 +22,15 @@
         exit();
     }
 
-    $UserID = @getId($data->email, $data->password);
+    $user = @User::getUserWithEmailPassword($data->email, $data->password);
 
-    if($UserID == -1)
+    if($user == null)
     {
         http_response_code(401);
         exit();
     }
 
-    echo $UserID . "\n";
-    $flag = @ascend($UserID);
-    echo $flag . "\n";
+    $flag = @$user->ascend();
     if(!$flag)
     {
         http_response_code(403);

@@ -22,14 +22,14 @@
         exit();
     }
 
-    $UserID = @getId($data->email, $data->password);
+    $user = @User::getUserWithEmailPassword($data->email, $data->password);
 
-    if($UserID == -1)
+    if($user == null)
     {
         http_response_code(401);
         exit();
     }
 
-    echo json_encode(@getUser($UserID));
+    echo json_encode(@$user->getAllUserInfo());
 
 ?>

@@ -27,7 +27,9 @@
         exit();
     }
 
-    if(@getId($data->email, $data->password) == -1)
+    $user = @User::getUserWithEmailPassword($data->email, $data->password);
+
+    if($user == null)
     {
         http_response_code(401);
         exit();

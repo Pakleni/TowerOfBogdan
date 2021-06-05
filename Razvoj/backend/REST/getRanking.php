@@ -13,5 +13,5 @@
         exit();
     }
 
-    echo json_encode(@getTop5());
+    echo json_encode(@User::getTop5());
 ?>

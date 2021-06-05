@@ -28,17 +28,17 @@
             http_response_code(401);
             exit();
         }
-        if(@checkEmail($data->email))
+        if(@User::checkEmail($data->email))
         {
             http_response_code(201);
             exit();
         }
-        if(@checkUsername($data->username))
+        if(@User::checkUsername($data->username))
         {
             http_response_code(202);
             exit();
         }
-        $flag = @createAccount($data->username, $data->password, $data->email);
+        $flag = @User::createAccount($data->username, $data->password, $data->email);
         if($flag)
         {
             http_response_code(200);

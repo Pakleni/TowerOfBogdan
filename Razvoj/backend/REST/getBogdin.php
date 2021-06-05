@@ -19,5 +19,5 @@
     if($Admin)
         echo -1;
     else
-        echo @getBogdin($UserID);
+        echo @$user->getBogdin();
 ?>

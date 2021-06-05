@@ -30,7 +30,7 @@
         $reward = $game->getReward($_REQUEST["bet"]);
         $generatedSymbols = $game->getSymbols();
         if(!$Admin)
-            @updateBogdin($UserID, $reward[0] - $_REQUEST["bet"]);
+            @$user->addBogdin($reward[0] - $_REQUEST["bet"]);
 
         $answer = array($reward, $generatedSymbols);
         echo json_encode($answer);

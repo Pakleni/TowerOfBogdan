@@ -21,24 +21,17 @@ if(!isset($data->email) || !isset($data->password))
 	exit();
 }
 
-$UserID = @getId($data->email, $data->password);
+$user = @User::getUserWithEmailPassword($data->email, $data->password);
 
-if($UserID == -1)
+if($user == null)
 {
-	http_response_code(401);
-	exit();
+  http_response_code(401);
+  exit();
 }
-
-$email = $data->email;
-$password = $data->password;
-
-$id = getId($email,$password);
 
 $hash = "";
 
-if($id != -1){
-  $hash = getHash($id);
-}
+$hash = @$user->setRandomHash();
 
 $YOUR_DOMAIN = 'http://localhost/stripe';
 if($hash != ""){

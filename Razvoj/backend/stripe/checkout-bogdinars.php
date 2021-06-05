@@ -43,7 +43,6 @@ $hash = "";
 
 $hash = @$user->setRandomHash();
 
-$YOUR_DOMAIN = 'http://localhost';
 if($hash != ""){
   $checkout_session = \Stripe\Checkout\Session::create([
     'payment_method_types' => ['card'],
@@ -59,8 +58,8 @@ if($hash != ""){
       'quantity' => 1,
     ]],
     'mode' => 'payment',
-    'success_url' => $YOUR_DOMAIN . '/stripe/success.php?amount='.$amount.'&hash='.$hash,
-    'cancel_url' => $YOUR_DOMAIN . '/cancel',
+    'success_url' => 'https://database.mandrakestudios.net/htdocs/bogdani/stripe/success.php?amount='.$amount.'&hash='.$hash,
+    'cancel_url' => 'https://tower-of-bogdan.vercel.app/cancel',
   ]);
   
   http_response_code(200);

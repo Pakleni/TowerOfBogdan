@@ -35,7 +35,10 @@
         $reward = $game->getReward($_REQUEST["bet"]);
         $generatedSymbols = $game->getSymbols();
         if(!$Admin)
-            @$user->addBogdin($reward[0] - $_REQUEST["bet"]);
+        {
+            @$user->addBogdin(- $_REQUEST["bet"]);
+            @$user->addBogdin($reward[0]);
+        }
 
         $answer = array(array(floor($reward[0]*pow(1.1,@$user->getVip() - 1)), $reward[1], $reward[2]), $generatedSymbols);
         echo json_encode($answer);

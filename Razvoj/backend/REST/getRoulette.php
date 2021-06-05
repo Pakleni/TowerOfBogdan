@@ -59,7 +59,10 @@
         $reward = $game->getReward($data->bets);
         $num = $game->getNum();
         if(!$Admin)
-            @$user->addBogdin($reward - $allBets);
+        {
+            @$user->addBogdin(-$allBets);
+            @$user->addBogdin($reward);
+        }
 
         $answer = array(floor($reward*pow(1.1,@$user->getVip() - 1)), $num);
         echo json_encode($answer);

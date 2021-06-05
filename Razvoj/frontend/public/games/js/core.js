@@ -3,11 +3,11 @@
 var WIDTH = 1280;
 var HEIGHT = 720;
 
-var reqUrl = "";
+var reqUrl = "/";
 var defaultServerErrorMessage = "There was a server error, please try again.";
 
 
-var username = sessionStorage.getItem("username");
+var username = sessionStorage.getItem("email");
 var password = sessionStorage.getItem("password");
 
 var defaultNormalTint = 0xb5a8a8;

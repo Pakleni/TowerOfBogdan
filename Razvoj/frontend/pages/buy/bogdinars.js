@@ -2,7 +2,37 @@
 import React from "react";
 import Title from "../../components/title";
 import NotLogged from "../../components/notlogged";
+import Head from "next/head";
 
+function Buy(stripe, amount) {
+  const username = sessionStorage.getItem("email");
+  const pass = sessionStorage.getItem("password");
+
+  const data = { email: username, password: pass, amount: amount };
+
+  fetch("/stripe/checkout-bogdinars.php", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  })
+    .then(function (response) {
+      if (response.status === 200) return response.json();
+      else return Promise.reject(new Error("Request rejected!"));
+    })
+    .then(function (session) {
+      return stripe.redirectToCheckout({ sessionId: session.id });
+    })
+    .then(function (result) {
+      if (result.error) {
+        alert(result.error.message);
+      }
+    })
+    .catch(function (error) {
+      console.error("Error:", error);
+    });
+}
 export default function Bogdinars() {
   let isLogged = false;
 
@@ -17,6 +47,10 @@ export default function Bogdinars() {
   }
   return isLogged ? (
     <div className="container">
+      <Head>
+        <script src="https://polyfill.io/v3/polyfill.min.js?version=3.52.1&features=fetch"></script>
+        <script src="https://js.stripe.com/v3/"></script>
+      </Head>
       <Title title="Bogdinars"></Title>
       <div className="section is-flex is-align-content-center is-flex-direction-column">
         <div className="has-text-centered">
@@ -32,7 +66,13 @@ export default function Bogdinars() {
           <button className="button title is-3-5 is-warning">{`${10000}β`}</button>
         </div>
         <div className="is-align-self-center">
-          <button className="button title is-3-5 is-danger">{`${50000}β`}</button>
+          <button
+            className="button title is-3-5 is-danger"
+            onClick={() =>
+              // eslint-disable-next-line no-undef
+              Buy(Stripe("pk_test_TYooMQauvdEDq54NiTphI7jx"), 50000)
+            }
+          >{`${50000}β`}</button>
         </div>
       </div>
       <div className="section">

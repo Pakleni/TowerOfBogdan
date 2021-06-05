@@ -343,7 +343,7 @@
 
             $str = "";
             for($i = 0; $i < 256; $i++){
-                $str += $seed[random_int(0, count($seed) - 1)];
+                $str .= $seed[random_int(0, count($seed) - 1)];
             }
 
             $dbc = User::connectToDB();

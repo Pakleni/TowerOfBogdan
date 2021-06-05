@@ -7,18 +7,6 @@ $amount = $_REQUEST["amount"];
 
 User::payWithHash($hash, $amount);
 
+header("Location: /success");
+exit();
 ?>
-<html>
-<head>
-  <title>Thanks for your order!</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-  <section>
-    <p>
-      We appreciate your business!
-      <a href="">Go Back</a>.
-    </p>
-  </section>
-</body>
-</html>

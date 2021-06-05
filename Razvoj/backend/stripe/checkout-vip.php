@@ -6,6 +6,10 @@ require_once "../REST/phpFunctions.php";
 require_once 'stripe-php-7.81.0/init.php';
 \Stripe\Stripe::setApiKey('sk_test_4eC39HqLyjWDarjtT1zdp7dc');
 
+if($_SERVER["REQUEST_METHOD"] == "OPTIONS")
+{
+    exit();
+}
 
 if($_SERVER["REQUEST_METHOD"] != "POST")
 {

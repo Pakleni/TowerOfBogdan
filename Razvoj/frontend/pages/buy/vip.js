@@ -62,7 +62,7 @@ export default function VipStatus() {
             className="button title is-3-5 is-info"
             onClick={() =>
               // eslint-disable-next-line no-undef
-              Buy(Stripe(process.env.host), 1)
+              Buy(Stripe(process.env.stripe), 1)
             }
           >{`VIP Level 1`}</button>
         </div>
@@ -71,7 +71,7 @@ export default function VipStatus() {
             className="button title is-3-5 is-success"
             onClick={() =>
               // eslint-disable-next-line no-undef
-              Buy(Stripe(process.env.host), 2)
+              Buy(Stripe(process.env.stripe), 2)
             }
           >{`VIP Level 2`}</button>
         </div>
@@ -80,7 +80,7 @@ export default function VipStatus() {
             className="button title is-3-5 is-danger"
             onClick={() =>
               // eslint-disable-next-line no-undef
-              Buy(Stripe(process.env.host), 3)
+              Buy(Stripe(process.env.stripe), 3)
             }
           >{`VIP Level 3`}</button>
         </div>

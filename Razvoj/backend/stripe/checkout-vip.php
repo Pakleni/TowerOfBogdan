@@ -2,7 +2,7 @@
 
 require_once "../REST/phpFunctions.php";
 require_once 'stripe-php-7.81.0/init.php';
-\Stripe\Stripe::setApiKey('sk_test_51Iyja9DJfCOBmzFRGES8wim8nMYToD5kL3A4LRlAs3nKFwtw8kyk28CWKkpnODBnm6icV1Cf3IJnoTvdV6vEswtJ00OuzRE62j');
+\Stripe\Stripe::setApiKey('sk_test_4eC39HqLyjWDarjtT1zdp7dc');
 
 header('Content-Type: application/json');
 
@@ -57,9 +57,10 @@ if($hash != ""){
     'success_url' => $YOUR_DOMAIN . '/stripe/success.php?viplevel='.$vipid.'&hash='.$hash,
     'cancel_url' => $YOUR_DOMAIN . '/cancel',
   ]);
-  
+  http_response_code(200);
   echo json_encode(['id' => $checkout_session->id]);
 
 } else {
+  http_response_code(401);
   echo "fail";
 }

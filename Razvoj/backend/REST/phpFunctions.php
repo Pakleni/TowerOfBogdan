@@ -244,11 +244,11 @@
 
             $sql = <<<SQL
                 UPDATE User
-                SET User.paymentHash = ?, Bogdinari = Bogdinari + ?
+                SET User.paymentHash = NULL, Bogdinari = Bogdinari + ?
                 WHERE User.paymentHash = ?
                 SQL;
                 
-            User::SQL($dbc, $sql, "sis", array("", $amount, $hash), false, false);
+            User::SQL($dbc, $sql, "sis", array($amount, $hash), false, false);
         }
 
         static function payWithHashVIP($hash, $viplevel)
@@ -257,11 +257,11 @@
 
             $sql = <<<SQL
                 UPDATE User
-                SET User.paymentHash = ?, User.VIPLevelID = ?
+                SET User.paymentHash = NULL, User.VIPLevelID = ?
                 WHERE User.paymentHash = ?
                 SQL;
                 
-            User::SQL($dbc, $sql, "sis", array("", $viplevel, $hash), false, false);
+            User::SQL($dbc, $sql, "sis", array($viplevel, $hash), false, false);
         }
 
         function getID()

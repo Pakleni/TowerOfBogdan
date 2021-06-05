@@ -30,9 +30,14 @@
         exit();
     }
 
+    if(isset($_REQUEST["sessionId"]))
+    {
+        session_id($_REQUEST["sessionId"]);
+    }
+
+
     $flag1 = session_start();
-    $flag2 = session_regenerate_id();
-    if(!$flag1 || !$flag2)
+    if(!$flag1)
     {
         http_response_code(500);
         exit();
@@ -113,7 +118,7 @@
             if(!$Admin)
                 @$user->addBogdin($game->getReward($bet));
         }
-        echo json_encode(array($game->getWinner(),$game->getState(),floor($game->getReward($bet)*pow(1.1,@$user->getVip() - 1))));
+        echo json_encode(array($game->getWinner(),$game->getState(),floor($game->getReward($bet)*pow(1.1,@$user->getVip() - 1)), session_id()));
     }
     catch(Exception $e)
     {

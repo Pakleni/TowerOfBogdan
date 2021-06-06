@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import NotLogged from "../../components/notlogged";
 
 function ChangePassword() {
-  const { register, handleSubmit } = useForm();
+  const { changePass, handleSubmit } = useForm();
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setSuccess] = useState(null);
 
@@ -72,7 +72,7 @@ function ChangePassword() {
         <div className="hero-body">
           <div className="container">
             <h1 className="title is-1">Tower Of Bogdan</h1>
-            <h2 className="subtitle is-3">Register</h2>
+            <h2 className="subtitle is-3">Change Password</h2>
           </div>
         </div>
       </section>
@@ -89,7 +89,7 @@ function ChangePassword() {
                           type="text"
                           name="name"
                           style={{ display: "none" }}
-                          ref={register()}
+                          ref={changePass()}
                         />
                       </div>
                       <div className="field">
@@ -108,7 +108,7 @@ function ChangePassword() {
                             type="password"
                             id="password"
                             name="password"
-                            ref={register({ required: true })}
+                            ref={changePass({ required: true })}
                             disabled={isSuccess !== null}
                           />
                         </div>
@@ -129,7 +129,7 @@ function ChangePassword() {
                             type="password"
                             id="new_password"
                             name="new_password"
-                            ref={register({ required: true })}
+                            ref={changePass({ required: true })}
                             disabled={isSuccess !== null}
                           />
                         </div>

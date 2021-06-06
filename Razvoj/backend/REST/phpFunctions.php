@@ -1,4 +1,7 @@
 <?php
+
+    //Radio Mihailo Pacaric 2018/0609
+
     //promenljive za lakse menjanje hosta
     $DATABASE = "https://database.mandrakestudios.net/htdocs/bogdani/";
     $HOST = "https://tower-of-bogdan.vercel.app/";
@@ -442,8 +445,8 @@
                 $price = $result[0]["CostToAscendTo"];
                 $sql = <<<SQL
                     UPDATE User
-                    SET User.Bogdinari = User.Bogdinari - ?, User.BogdanFloorID = User.BogdanFloorID +1
-                    WHERE User.ID = ?
+                    SET User.Bogdinari = User.Bogdinari - ?, User.BogdanFloorID = User.BogdanFloorID + 1
+                    WHERE User.ID = ? AND EXISTS (SELECT * FROM BogdanFloor WHERE BogdanFloor.ID = User.BogdanFloorID + 1)  
                     SQL;
 
                 DataBase::SQL($dbc, $sql, "ii", array($price, $this->userID), false, false);
@@ -497,8 +500,8 @@
 
             $sql = <<<SQL
                 SELECT User.Username, User.Email, User.Bogdinari, VIPLevel.Name AS VipName, b1.ID AS FloorNumber, b1.Name AS FloorName, b1.CostToStay AS CostToStay, b2.CostToAscendTo AS CostToNext
-                FROM User, VIPLevel, BogdanFloor b1, BogdanFloor b2
-                WHERE User.ID = ? AND User.VIPLevelID = VIPLevel.ID AND b1.ID = User.BogdanFloorID AND b2.ID = User.BogdanFloorID + 1
+                FROM User, BogdanFloor b1 LEFT JOIN BogdanFloor b2 ON(b2.ID = User.BogdanFloorID + 1) LEFT JOIN VIPLevel ON(User.VIPLevelID = VIPLevel.ID)
+                WHERE User.ID = ? AND b1.ID = User.BogdanFloorID
                 SQL;
             
             $retSql = DataBase::SQL($dbc, $sql, "i", array($this->userID), false, true);

@@ -499,9 +499,9 @@
             $dbc = DataBase::connectToDB();
 
             $sql = <<<SQL
-                SELECT User.Username, User.Email, User.Bogdinari, VIPLevel.Name AS VipName, b1.ID AS FloorNumber, b1.Name AS FloorName, b1.CostToStay AS CostToStay, b2.CostToAscendTo AS CostToNext
-                FROM User, BogdanFloor b1 LEFT JOIN BogdanFloor b2 ON(b2.ID = User.BogdanFloorID + 1) LEFT JOIN VIPLevel ON(User.VIPLevelID = VIPLevel.ID)
-                WHERE User.ID = ? AND b1.ID = User.BogdanFloorID
+                SELECT u.Username, u.Email, u.Bogdinari, VIPLevel.Name AS VipName, b1.ID AS FloorNumber, b1.Name AS FloorName, b1.CostToStay AS CostToStay, b2.CostToAscendTo AS CostToNext
+                FROM User u JOIN BogdanFloor b1 LEFT JOIN BogdanFloor b2 ON b2.ID = u.BogdanFloorID + 1 LEFT JOIN VIPLevel ON u.VIPLevelID = VIPLevel.ID
+                WHERE u.ID = ? AND b1.ID = u.BogdanFloorID
                 SQL;
             
             $retSql = DataBase::SQL($dbc, $sql, "i", array($this->userID), false, true);

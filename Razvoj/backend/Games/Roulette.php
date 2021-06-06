@@ -1,20 +1,38 @@
 <?php
     //Radio Nemanja Mehovic 2018/0452
+    //sva moguca polja koja mogu da se oznace na ruletu a da nisu brojevi
     define("nonNumberFields",["00","red","black","even","odd","1to18","19to36","1st12","2nd12","3rd12","col1","col2","col3"]);
+    //svi brojevi koji su crvene boje ostali su crne ili su 0 ili 00
     define("red",[1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36]);
+    //puta koliko se odredjuje nagrada igraca
     define("singleDigitMultiplier",36);
     define("rowColMultiplier",3);
     define("evenSplitMultiplier",2);
-
+    /**
+     * Roulette - klasa koja se koristi za igranje ruleta
+     * 
+     * @version 1.0
+     */
     class Roulette
     {
+        /**
+         * broj koji je dobio igrac
+         * @var int
+         */
         private $num;
-
+        /**
+         * konstruktor koji proizvodi broj igracu
+         * @return null
+         */
         function __construct()
         {
             $this->num = random_int(0, 37);
         }
-
+        /**
+         * funkcija koja racuna dobitak igraca u zavisnosti od broja koga je dobio i sta je ulozio ($bets)
+         * @param array $bets
+         * @return int
+         */
         function getReward($bets)
         {
             $reward = 0;
@@ -86,7 +104,11 @@
             }
             return $reward;
         }
-
+        //vraca stanje igre tj broj koji je igrac dobio
+        /**
+         * vraca stanje igre tj broj koji je igrac dobio
+         * @return int
+         */
         function getNum()
         {
             return $this->num;

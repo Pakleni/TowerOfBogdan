@@ -1,6 +1,8 @@
 <?php
 header("Access-Control-Allow-Origin:*");
-
+/*
+  Rest access point za uspesnu kupovinu bogdinara/vipa
+*/
 require_once "../REST/phpFunctions.php";
 
 if(!isset($_REQUEST["hash"]))

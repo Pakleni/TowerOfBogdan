@@ -2,7 +2,9 @@
     //Radio Nemanja Mehovic 2018/0452
     require_once "../validations.php";
     require_once "../Games/Slots.php";
-
+    /*
+        Rest access point za igranje slotova
+    */
     header("Access-Control-Allow-Origin:*");
     header("Access-Control-Allow-Methods:POST, OPTIONS");
     header("Content-Type:application/json");

@@ -1,25 +1,36 @@
 <?php
     //Radio Nemanja Mehovic 2018/0452
-    //all symbols in their respactive categories
+    //svi moguci simboli i njihoce kategorije
     define("basicSymbols", ["Cherry", "Lemon", "Eggplant", "Grapes", "Banana"]);
     define("eliteSymbols", ["Seven", "Diamond", "Egg", "Treasure"]);
     define("jackpotSymbols", "Bogdan");
-    //chances of getting one symbol from each category
+    //sanse za dobijanje 1 simbola iz odredjene kategorije
     define("basicChance", 75);
     define("eliteChance", 24);
     define("jackpotChance", 1);
-    //Reward multipliers
+    //puta koliko se odredjuje nagrada igraca za svaku kategoriju i kolicinu simbola
     define("basicRewardsMultiplier", [1, 2, 5]);
     define("eliteRewardsMultiplier", [5, 10, 50]);
     define("jackpotRewardsMultiplier",[100, 500, 1000]);
-    //num of columns and rows in slot machine
+    //broj kolona i redova u masini
     define("rows", 3);
     define("col", 5);
-
+    /**
+     * Slots - klasa za igranje slotova
+     * 
+     * @version 1.2
+     */
     class Slots
     {
+        /**
+         * promenljiva koja sadrzi sve simbole koje je korisnik dobio
+         * @var array
+         */
         private $matrix;
-
+        /**
+         * konstruktor koji generise sve simbole u $matrix
+         * @return null
+         */
         function __construct()
         {
             $this->matrix = array();
@@ -40,7 +51,12 @@
                         $this->matrix[$i][$j] = jackpotSymbols;
                 }
         }
-
+        /**
+         * funkcija koja racuna duzinu istih simbola koji mogu se koristiti za nagradu od pozicije r i c gde je r red a c kolona
+         * @param int $r
+         * @param int $c
+         * @return int
+         */
         private function findLength($r, $c)
         {
             $cnt = 1;
@@ -77,7 +93,13 @@
             }
             return $cnt;
         }
-
+        /**
+         * funkcija koja racuna za dati $symbol nagradu ako ima $length simbola uzastopno(sleva na desno) i ulozeno je $bet od strane igraca
+         * @param string $symbol
+         * @param int $length
+         * @param int $bet
+         * @return int
+         */
         private function calculateReward($symbol, $length, $bet)
         {
             for ($i = 0; $i < count(basicSymbols); $i++)
@@ -90,8 +112,11 @@
                 return $bet * jackpotRewardsMultiplier[$length - 3];
             return 0;
         }
-
-
+        /**
+         * koristi calculateReward i findLength da izracuna nagradu igraca i koji simbol je dobio i koliko njih
+         * @param int $bet
+         * @return array
+         */
         function getReward($bet)
         {
             $reward = array(0, 0, NULL);
@@ -115,7 +140,10 @@
                 }
             return $reward;
         }
-
+        /**
+         * dohvata sve generisane simbole
+         * @return array
+         */
         function getSymbols()
         {
             return $this->matrix;

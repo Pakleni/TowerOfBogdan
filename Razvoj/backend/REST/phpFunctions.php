@@ -1,9 +1,17 @@
 <?php
-
+    //promenljive za lakse menjanje hosta
     $DATABASE = "https://database.mandrakestudios.net/htdocs/bogdani/";
     $HOST = "https://tower-of-bogdan.vercel.app/";
-    
+    /**
+     * vip - klasa za pristupanje vip podacima u bazi
+     * @version 2.1
+     */
     class vip{
+        /**
+         * funkcija koja vraca ime vipa
+         * @param int $vipid
+         * @return string
+         */
         public static function getVIPName($vipid)
         {
             $dbc = User::connectToDB();
@@ -24,7 +32,11 @@
 
             return null;
         }
-        
+        /**
+         * funkcija koja vraca cenu vipa
+         * @param int $vipid
+         * @return int
+         */
         public static function getVIPPrice($vipid)
         {
             $dbc = User::connectToDB();
@@ -46,24 +58,42 @@
             return null;
         }
     }
-
+    //klasa za pristupanje user podacima u bazi
+    /**
+     * User - klasa za pristupanje user podacima u bazi
+     * @version 2.3
+     */
     class User
     {
-
+        /**
+         * promenljiva koja cuva user id
+         * @var int $userID
+         */
         private $userID;
-
+        /**
+         * pomocna funkcija za hasing
+         * @param string $pass
+         * @return string
+         */
         private static function pepper($pass)
         {
             $pepper = "mehovic";
 
             return hash_hmac("sha256", $pass, $pepper);
         }
-
+        /**
+         * hesiranje sifre
+         * @param string $pass
+         * @return string
+         */
         private static function hashIt($pass)
         {
             return password_hash(User::pepper($pass), PASSWORD_ARGON2ID);
         }
-
+        /**
+         * funkcija za pravljenje konekcije do baze
+         * @return mysqli
+         */
         public static function connectToDB()
         {
             $user = 'bogdan';
@@ -73,7 +103,16 @@
             $dbc = mysqli_connect('localhost', $user, $pass, $db) or die("Unable to connect");
             return $dbc;
         }
-
+        /**
+         * funkcija za izvrsavanje sql-a na bazi
+         * @param mysqli $dbc
+         * @param string $sql
+         * @param string $bind
+         * @param array $params
+         * @param bool $resNeeded
+         * @param bool $retNeeded
+         * @return array
+         */
         public static function SQL($dbc, $sql, $bind, $params, $resNeeded, $retNeeded)
         {
             $stmt = mysqli_stmt_init($dbc);
@@ -110,12 +149,20 @@
 
             return $ret;
         }
-
+        /**
+         * konstruktor koji samo setuje userid na -1
+         * @return null
+         */
         private function __construct()
         {
             $this->userID = -1;
         }
-    
+        /**
+         * funkcija koji pravi nov objekat tipa User koji sadrzi userId usera u bazi koji ima isti email i sifru kao $email i $password ili vraca null ako nema takvog korisnika u bazi
+         * @param string $email
+         * @param strint $password
+         * @return User
+         */
         static function getUserWithEmailPassword($email, $password)
         {
             $instance = new self();
@@ -147,7 +194,13 @@
 
             return $instance;
         }
-
+        /**
+         * funkcija koja pravi novog korisnika u bazi sa usernamom $user, sifrom $pass i emailom $mail
+         * @param string $user
+         * @param string $pass
+         * @param string $mail
+         * @return bool
+         */
         static function createAccount($user, $pass, $mail)
         {
             $dbc = User::connectToDB();
@@ -175,7 +228,11 @@
 
             return true;
         }
-
+        /**
+         * funkcija koja proverava  da li user sa emailom koji je jednak $mail postoji
+         * @param string $mail
+         * @return bool
+         */
         static function checkEmail($mail)
         {
             $dbc = User::connectToDB();
@@ -194,7 +251,11 @@
         
             return false;
         }
-
+        /**
+         * funkcija koja proverava  da li user sa usernameom koji je jednak $username postoji
+         * @param string $username
+         * @return bool
+         */
         static function checkUsername($username)
         {
             $dbc = User::connectToDB();
@@ -213,7 +274,10 @@
 
             return false;
         }
-
+        /**
+         * funkcija koja vraca najboljih 5 igraca iz baze
+         * @return array
+         */
         static function getTop5()
         {
             $dbc = User::connectToDB();
@@ -237,7 +301,12 @@
         
             return $ret;
         }
-
+        /**
+         * funkcija koja korisniku koji sadrzi $hash u tabeli dodaje $amount bogdinara
+         * @param string $hash
+         * @param int $amount
+         * @return null
+         */
         static function payWithHash($hash, $amount)
         {
             $dbc = User::connectToDB();
@@ -250,7 +319,12 @@
                 
             User::SQL($dbc, $sql, "is", array($amount, $hash), false, false);
         }
-
+        /**
+         * funkcija koja korisniku koji sadrzi $hash u tabeli postavlja da bude vip sa idom $vipLevel
+         * @param string $hash
+         * @param int $viplevel
+         * @return null
+         */
         static function payWithHashVIP($hash, $viplevel)
         {
             $dbc = User::connectToDB();
@@ -263,12 +337,18 @@
                 
             User::SQL($dbc, $sql, "is", array($viplevel, $hash), false, false);
         }
-
+        /**
+         * funkcija koja vraca user id
+         * @return int
+         */
         function getID()
         {
             return $this->userID;
         }
-
+        /**
+         * funkcija koja vraca koliko bogdinara korisnik ima
+         * @return int
+         */
         function getBogdin()
         {
             $dbc = User::connectToDB();
@@ -285,7 +365,11 @@
 
             return $row[0]["Bogdinari"];
         }
-
+        /**
+         * funkcija koja dodaje $amount bogdinara korisniku
+         * @param int $amount
+         * @return null
+         */
         function addBogdin($amount)
         {
             $dbc = User::connectToDB();
@@ -308,7 +392,11 @@
 
             mysqli_close($dbc);
         }
-
+        /**
+         * funkcija koja korisniku menja sifru da bude $newPassword
+         * @param string $newPassword
+         * @return null
+         */
         function changePassword($newPassword)
         {
             $dbc = User::connectToDB();
@@ -325,7 +413,10 @@
 
             mysqli_close($dbc);
         }
-
+        /**
+         * funkcija koja korisniku povecava floor level
+         * @return bool
+         */
         function ascend()
         {
             $dbc = User::connectToDB();
@@ -359,7 +450,10 @@
                 return false;
             }
         }
-
+        /**
+         * funkcija koja vraca vip level korisnika
+         * @return int
+         */
         function getVip()
         {
             $dbc = User::connectToDB();
@@ -377,12 +471,18 @@
 
             return $retSql[0]["VIPLevelID"];
         }
-
+        /**
+         * funkcija koja kaze da li je korisnik admin
+         * @return bool
+         */
         function isAdmin()
         {
             return $this->getVip() == 5;
         }
-
+        /**
+         * funkcija koja vraca sve korisne informacije usera
+         * @return array
+         */
         function getAllUserInfo()
         {
             $dbc = User::connectToDB();
@@ -404,7 +504,10 @@
 
             return $ret;
         }
-
+        /**
+         * funkcija koja postavlja random hash useru u tabeli
+         * @return string
+         */
         function setRandomHash()
         {
             $seed = str_split('abcdefghijklmnopqrstuvwxyz'.'ABCDEFGHIJKLMNOPQRSTUVWXYZ');

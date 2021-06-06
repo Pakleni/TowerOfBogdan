@@ -1,7 +1,9 @@
 <?php
 header("Access-Control-Allow-Origin:*");
 header('Content-Type: application/json');
-
+/*
+  Rest access point za kupovinu vipa
+*/
 require_once "../REST/phpFunctions.php";
 require_once 'stripe-php-7.81.0/init.php';
 \Stripe\Stripe::setApiKey('sk_test_4eC39HqLyjWDarjtT1zdp7dc');

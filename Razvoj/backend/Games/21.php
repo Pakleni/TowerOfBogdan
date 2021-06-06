@@ -1,13 +1,39 @@
 <?php
     //Radio Nemanja Mehovic 2018/0452
+    //sve moguce karte koje mogu da se izvuku
     define("allCards",[1,2,3,4,5,6,7,8,9,10,11]);
+    /**
+     *  Game21 - klasa za igranje igre 21
+     *
+     *  @version 1.1
+     */
     class Game21
     {
+        /**
+         * promenljiva koja sadrzi karte koje mogu da izvuku diler i player
+         * @var array
+        */
         private $cardsAvailable;
+        /**
+         * karte koje player trenutno ima
+         * @var array
+        */
         private $playerCards;
+        /**
+         * larte koje diler trenutno ima
+         * @var array
+        */
         private $dealerCards;
+        /**
+         * pobednik igre 1 - pobedio je igrac -1 -pobednik je diler 0 - igra se idalje igra
+         * @var int
+        */
         private $winner;
-
+        /**
+         * konstruktor za pravljenje igre 21 inicijalizuje sa sa prethodnim stanjem igre ili ako je prethodno stanje null pravi pocetno stanje
+         * @param array $currentState
+         * @return null
+        */
         function __construct($currentState)
         {
             $this->winner = 0;
@@ -45,7 +71,10 @@
                     $this->winner = -1;
             }
         }
-
+        /**
+         * funkcija za igranje igre gde igrac i diler izvlace po jednu kartu(igra moze se zaustaviti sa ovom funkciom ako neko pobedi)
+         * @return null
+        */
         function hit()
         {
             if($this->winner != 0)
@@ -80,7 +109,10 @@
                 return;
             }
         }
-
+        /**
+         * funkcija za zaustavljanje igre
+         * @return null
+        */
         function stand()
         {
             if($this->winner != 0)
@@ -126,7 +158,11 @@
                 }
             }while(true);
         }
-
+        /**
+         * funkcija za dohvatanje koliko je igrac osvojio
+         * @param int $bet
+         * @return int
+        */
         function getReward($bet)
         {
             $reward = 0;
@@ -134,17 +170,27 @@
                 $reward = $bet * 2;
             return $reward;
         }
-
+        /**
+         * funkcija koja vraca trenutno stanje igre
+         * @return array
+        */
         function getState()
         {
             return array($this->playerCards, $this->dealerCards);
         }
-
+        /**
+         * funkcija koja vraca pobednika
+         * @return int
+        */
         function getWinner()
         {
             return $this->winner;
         }
-
+        /**
+         * funkcija koja samo proverava da li zbig brojeva u nizu $arr je jednak 21
+         * @param array $arr
+         * @return bool
+        */
         private function checkIf21($arr)
         {
             $sum = 0;
@@ -152,7 +198,11 @@
                 $sum += $tmp;
             return $sum == 21;
         }
-
+        /**
+         * funkcija koja proverava da li je zbir brojeva u nizu $arr veci od 21
+         * @param array $arr
+         * @return bool
+        */
         private function checkIfBusted($arr)
         {
             $sum = 0;
@@ -160,7 +210,10 @@
                 $sum += $tmp;
             return $sum > 21;
         }
-
+        /**
+         * funkcija za generisanje nasumicnog broja izmedju min(cardsAvailable) i max(cardsAvailable) koji je validan
+         * @return int
+        */
         private function generateVal()
         {
             $val = -1;

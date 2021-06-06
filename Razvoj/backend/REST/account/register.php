@@ -5,7 +5,9 @@
     // "Account was not succesfully created" => 203;
     // "Account was succesfully created" => 204;
     require_once "../phpFunctions.php";
-
+    /*
+        Rest access point za registraciju novog korisnika
+    */
     header("Access-Control-Allow-Origin:*");
     header("Access-Control-Allow-Methods:POST, OPTIONS");
     header("Content-Type:application/json");

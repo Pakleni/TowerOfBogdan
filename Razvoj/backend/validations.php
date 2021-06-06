@@ -1,10 +1,13 @@
 <?php
     //Radio Nemanja Mehovic 2018/0452
     require_once "REST/phpFunctions.php";
-
+    //Promenljive koje sluze za verifikaciju
     $user = null;
     $Admin = false;
-
+    /**
+     * auth - funkcija koja sluzi za da proveri da li je korisnik poslao dobar login info
+     * @return null
+    */
     function auth()
     {
         global $user;
@@ -30,7 +33,11 @@
 
         $Admin = @$user->isAdmin();
     }
-
+    /**
+     * betAmmountInRange - proverava da li korisnik ima vise bogdinara nego $arg
+     * @param int $arg
+     * @return null
+    */
     function betAmmountInRange($arg)
     {
         global $user;
@@ -45,7 +52,11 @@
             exit();
         }
     }
-
+    /**
+     * checkIfInt - proverava da li je $arg int
+     * @param mixed $arg
+     * @return bool
+    */
     function checkIfInt($arg){
         return is_numeric($arg) && is_int(+$arg);
       }

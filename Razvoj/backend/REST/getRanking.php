@@ -1,7 +1,9 @@
 <?php
     //Radio Nemanja Mehovic 2018/0452
     require_once "phpFunctions.php";
-
+    /*
+        Rest access point za nabavljanje najboljih 5 igraca
+    */
     header("Access-Control-Allow-Origin:*");
     header("Access-Control-Allow-Methods:GET, OPTIONS");
     header("Content-Type:application/json");

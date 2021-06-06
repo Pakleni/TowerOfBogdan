@@ -41,6 +41,7 @@ function Login() {
         method: "POST",
         body: JSON.stringify(data),
       }).then(function (response) {
+        setIsLoading(false);
         const code = response.status;
         if (code === 200) {
           sessionStorage.setItem("email", data.email);
@@ -54,7 +55,6 @@ function Login() {
     } catch (err) {
       setSuccess(false);
     }
-    setIsLoading(false);
   };
 
   return (

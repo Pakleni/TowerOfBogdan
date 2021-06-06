@@ -11,7 +11,8 @@ export function SignOut() {
   location.reload();
   return false;
 }
-function Ascend(setAscendError) {
+function Ascend(setAscendError, setAscendLoading) {
+  setAscendLoading(true);
   const username = sessionStorage.getItem("email");
   const pass = sessionStorage.getItem("password");
 
@@ -21,6 +22,7 @@ function Ascend(setAscendError) {
     method: "POST",
     body: JSON.stringify(data),
   }).then((response) => {
+    setAscendLoading(false);
     if (response.status === 200) location.reload();
     else setAscendError(true);
   });
@@ -39,6 +41,7 @@ function Ascend(setAscendError) {
 
 export function Account() {
   const [ascendError, setAscendError] = useState(false);
+  const [ascendLoading, setAscendLoading] = useState(true);
 
   const ISSERVER = typeof window === "undefined";
 
@@ -75,6 +78,8 @@ export function Account() {
             "floor"
           ).innerHTML = `${data.FloorName}[${data.FloorNumber}]`;
           document.getElementById("level").innerHTML = data.VipName;
+
+          setAscendLoading(false);
         });
     }
   }
@@ -92,10 +97,14 @@ export function Account() {
       <br />
       <br />
       <button
-        className="button is-primary"
+        className={`button is-primary ${
+          ascendLoading ? "is-loading is-disabled" : ""
+        }`}
         id="ascension"
-        onClick={() => Ascend(setAscendError)}
-      ></button>
+        onClick={() => Ascend(setAscendError, setAscendLoading)}
+      >
+        Ascend[loading...]
+      </button>
       {ascendError === true && (
         <div>
           <br />
@@ -127,19 +136,27 @@ export function Account() {
                         <table>
                           <tr>
                             <th>Account Level</th>
-                            <th className="has-text-right" id="level"></th>
+                            <th className="has-text-right" id="level">
+                              loading...
+                            </th>
                           </tr>
                           <tr>
                             <th>Bogdinars</th>
-                            <th className="has-text-right" id="bogdinars"></th>
+                            <th className="has-text-right" id="bogdinars">
+                              loading...
+                            </th>
                           </tr>
                           <tr>
                             <th>Current Floor</th>
-                            <th className="has-text-right" id="floor"></th>
+                            <th className="has-text-right" id="floor">
+                              loading...
+                            </th>
                           </tr>
                           <tr>
                             <th>This weeks Bogdan tax</th>
-                            <th className="has-text-right" id="cost"></th>
+                            <th className="has-text-right" id="cost">
+                              loading...
+                            </th>
                           </tr>
                         </table>
                       </p>

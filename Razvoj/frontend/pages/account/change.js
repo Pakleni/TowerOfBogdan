@@ -23,6 +23,7 @@ function ChangePassword() {
         method: "POST",
         body: JSON.stringify(data),
       }).then(function (response) {
+        setIsLoading(false);
         const code = response.status;
         if (code === 200) {
           sessionStorage.setItem("email", data.email);
@@ -35,7 +36,6 @@ function ChangePassword() {
     } catch (err) {
       setSuccess(false);
     }
-    setIsLoading(false);
   };
 
   const checkSubmitted = () => {

@@ -27,6 +27,7 @@ function Register() {
         method: "POST",
         body: JSON.stringify(data),
       }).then(function (response) {
+        setIsLoading(false);
         const code = response.status;
         setErrorCode(code);
         if (code === 200) {
@@ -38,7 +39,6 @@ function Register() {
     } catch (err) {
       setSuccess(false);
     }
-    setIsLoading(false);
   };
 
   const checkSubmitted = () => {

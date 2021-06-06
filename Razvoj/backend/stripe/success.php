@@ -1,4 +1,6 @@
 <?php
+//Radio Mihailo Pacaric 2018/0609
+
 header("Access-Control-Allow-Origin:*");
 /*
   Rest access point za uspesnu kupovinu bogdinara/vipa

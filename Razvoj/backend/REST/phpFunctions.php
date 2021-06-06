@@ -1,95 +1,17 @@
 <?php
+
+    //Radio Mihailo Pacaric 2018/0609
+
     //promenljive za lakse menjanje hosta
     $DATABASE = "https://database.mandrakestudios.net/htdocs/bogdani/";
     $HOST = "https://tower-of-bogdan.vercel.app/";
+
     /**
-     * vip - klasa za pristupanje vip podacima u bazi
-     * @version 2.1
+     * DataBase - sluzi za pravljenje konekcija sa bazom i izvrsavanje upita
+     * @version 1.0
      */
-    class vip{
-        /**
-         * funkcija koja vraca ime vipa
-         * @param int $vipid
-         * @return string
-         */
-        public static function getVIPName($vipid)
-        {
-            $dbc = User::connectToDB();
-
-            $sql = <<<SQL
-                SELECT Name
-                FROM VIPLevel
-                WHERE VIPLevel.ID = ?
-                SQL;
-            
-            $result = User::SQL($dbc, $sql, "i", array($vipid), false, true);
-
-            if (count($result) > 0)
-            {
-                $row = $result[0];
-                return $row["Name"];
-            }
-
-            return null;
-        }
-        /**
-         * funkcija koja vraca cenu vipa
-         * @param int $vipid
-         * @return int
-         */
-        public static function getVIPPrice($vipid)
-        {
-            $dbc = User::connectToDB();
-
-            $sql = <<<SQL
-                SELECT Cost
-                FROM VIPLevel
-                WHERE VIPLevel.ID = ?
-                SQL;
-            
-            $result = User::SQL($dbc, $sql, "i", array($vipid), false, true);
-
-            if (count($result) > 0)
-            {
-                $row = $result[0];
-                return $row["Cost"];
-            }
-
-            return null;
-        }
-    }
-    //klasa za pristupanje user podacima u bazi
-    /**
-     * User - klasa za pristupanje user podacima u bazi
-     * @version 2.3
-     */
-    class User
+    class DataBase
     {
-        /**
-         * promenljiva koja cuva user id
-         * @var int $userID
-         */
-        private $userID;
-        /**
-         * pomocna funkcija za hasing
-         * @param string $pass
-         * @return string
-         */
-        private static function pepper($pass)
-        {
-            $pepper = "mehovic";
-
-            return hash_hmac("sha256", $pass, $pepper);
-        }
-        /**
-         * hesiranje sifre
-         * @param string $pass
-         * @return string
-         */
-        private static function hashIt($pass)
-        {
-            return password_hash(User::pepper($pass), PASSWORD_ARGON2ID);
-        }
         /**
          * funkcija za pravljenje konekcije do baze
          * @return mysqli
@@ -149,6 +71,95 @@
 
             return $ret;
         }
+    }
+
+    /**
+     * vip - klasa za pristupanje vip podacima u bazi
+     * @version 2.1
+     */
+    class vip{
+        /**
+         * funkcija koja vraca ime vipa
+         * @param int $vipid
+         * @return string
+         */
+        public static function getVIPName($vipid)
+        {
+            $dbc = DataBase::connectToDB();
+
+            $sql = <<<SQL
+                SELECT Name
+                FROM VIPLevel
+                WHERE VIPLevel.ID = ?
+                SQL;
+            
+            $result = DataBase::SQL($dbc, $sql, "i", array($vipid), false, true);
+
+            if (count($result) > 0)
+            {
+                $row = $result[0];
+                return $row["Name"];
+            }
+
+            return null;
+        }
+        /**
+         * funkcija koja vraca cenu vipa
+         * @param int $vipid
+         * @return int
+         */
+        public static function getVIPPrice($vipid)
+        {
+            $dbc = DataBase::connectToDB();
+
+            $sql = <<<SQL
+                SELECT Cost
+                FROM VIPLevel
+                WHERE VIPLevel.ID = ?
+                SQL;
+            
+            $result = DataBase::SQL($dbc, $sql, "i", array($vipid), false, true);
+
+            if (count($result) > 0)
+            {
+                $row = $result[0];
+                return $row["Cost"];
+            }
+
+            return null;
+        }
+    }
+    /**
+     * User - klasa za pristupanje user podacima u bazi
+     * @version 2.3
+     */
+    class User
+    {
+        /**
+         * promenljiva koja cuva user id
+         * @var int $userID
+         */
+        private $userID;
+        /**
+         * pomocna funkcija za hasing
+         * @param string $pass
+         * @return string
+         */
+        private static function pepper($pass)
+        {
+            $pepper = "mehovic";
+
+            return hash_hmac("sha256", $pass, $pepper);
+        }
+        /**
+         * hesiranje sifre
+         * @param string $pass
+         * @return string
+         */
+        private static function hashIt($pass)
+        {
+            return password_hash(User::pepper($pass), PASSWORD_ARGON2ID);
+        }
         /**
          * konstruktor koji samo setuje userid na -1
          * @return null
@@ -167,7 +178,7 @@
         {
             $instance = new self();
 
-            $dbc = User::connectToDB();
+            $dbc = DataBase::connectToDB();
 
             $sql = <<<SQL
                 SELECT *
@@ -175,7 +186,7 @@
                 WHERE Email = ?
                 SQL;
 
-            $result = User::SQL($dbc, $sql, "s", array($email), false, true);
+            $result = DataBase::SQL($dbc, $sql, "s", array($email), false, true);
             
             if (count($result) > 0)
             {
@@ -203,7 +214,7 @@
          */
         static function createAccount($user, $pass, $mail)
         {
-            $dbc = User::connectToDB();
+            $dbc = DataBase::connectToDB();
 
             $sql = <<<SQL
                 SELECT *
@@ -211,7 +222,7 @@
                 WHERE Email = ?
                 SQL;
 
-            $result = User::SQL($dbc, $sql, "s", array($mail), false, true);
+            $result = DataBase::SQL($dbc, $sql, "s", array($mail), false, true);
             
             if (count($result) > 0) { return false; }
 
@@ -222,7 +233,7 @@
                 VALUES (?, ?, ?, 1, 1)
                 SQL;
 
-            User::SQL($dbc, $sql, "sss", array($user, $hashed, $mail), false, false);
+                DataBase::SQL($dbc, $sql, "sss", array($user, $hashed, $mail), false, false);
 
             mysqli_close($dbc);
 
@@ -235,7 +246,7 @@
          */
         static function checkEmail($mail)
         {
-            $dbc = User::connectToDB();
+            $dbc = DataBase::connectToDB();
 
             $sql = <<<SQL
                 SELECT *
@@ -243,7 +254,7 @@
                 WHERE Email = ?
                 SQL;
         
-            $result = User::SQL($dbc, $sql, "s", array($mail), false, true);
+            $result = DataBase::SQL($dbc, $sql, "s", array($mail), false, true);
         
             mysqli_close($dbc);
             
@@ -258,7 +269,7 @@
          */
         static function checkUsername($username)
         {
-            $dbc = User::connectToDB();
+            $dbc = DataBase::connectToDB();
 
             $sql = <<<SQL
                 SELECT *
@@ -266,7 +277,7 @@
                 WHERE Username = ?
                 SQL;
 
-            $result = User::SQL($dbc, $sql, "s", array($username), false, true);
+            $result = DataBase::SQL($dbc, $sql, "s", array($username), false, true);
 
             mysqli_close($dbc);
             
@@ -280,7 +291,7 @@
          */
         static function getTop5()
         {
-            $dbc = User::connectToDB();
+            $dbc = DataBase::connectToDB();
 
             $sql = <<<SQL
                 SELECT User.Username, User.BogdanFloorID
@@ -290,7 +301,7 @@
                 SQL;
             
         
-            $retSql = User::SQL($dbc, $sql, "", array(), false, true);
+            $retSql = DataBase::SQL($dbc, $sql, "", array(), false, true);
         
             mysqli_close($dbc);
         
@@ -309,7 +320,7 @@
          */
         static function payWithHash($hash, $amount)
         {
-            $dbc = User::connectToDB();
+            $dbc = DataBase::connectToDB();
 
             $sql = <<<SQL
                 UPDATE User
@@ -317,7 +328,7 @@
                 WHERE User.paymentHash = ?
                 SQL;
                 
-            User::SQL($dbc, $sql, "is", array($amount, $hash), false, false);
+            DataBase::SQL($dbc, $sql, "is", array($amount, $hash), false, false);
         }
         /**
          * funkcija koja korisniku koji sadrzi $hash u tabeli postavlja da bude vip sa idom $vipLevel
@@ -327,7 +338,7 @@
          */
         static function payWithHashVIP($hash, $viplevel)
         {
-            $dbc = User::connectToDB();
+            $dbc = DataBase::connectToDB();
 
             $sql = <<<SQL
                 UPDATE User
@@ -335,7 +346,7 @@
                 WHERE User.paymentHash = ?
                 SQL;
                 
-            User::SQL($dbc, $sql, "is", array($viplevel, $hash), false, false);
+            DataBase::SQL($dbc, $sql, "is", array($viplevel, $hash), false, false);
         }
         /**
          * funkcija koja vraca user id
@@ -351,7 +362,7 @@
          */
         function getBogdin()
         {
-            $dbc = User::connectToDB();
+            $dbc = DataBase::connectToDB();
 
             $sql = <<<SQL
                 SELECT Bogdinari
@@ -359,7 +370,7 @@
                 WHERE User.ID = ?;
                 SQL;
 
-            $row = User::SQL($dbc, $sql, "i", array($this->userID), true, true);
+            $row = DataBase::SQL($dbc, $sql, "i", array($this->userID), true, true);
 
             mysqli_close($dbc);
 
@@ -372,7 +383,7 @@
          */
         function addBogdin($amount)
         {
-            $dbc = User::connectToDB();
+            $dbc = DataBase::connectToDB();
 
             $tmp = $amount;
 
@@ -388,7 +399,7 @@
                 WHERE User.ID = ?
                 SQL;
 
-            User::SQL($dbc, $sql, "ii", array($tmp,$this->userID), false, false);
+            DataBase::SQL($dbc, $sql, "ii", array($tmp,$this->userID), false, false);
 
             mysqli_close($dbc);
         }
@@ -399,7 +410,7 @@
          */
         function changePassword($newPassword)
         {
-            $dbc = User::connectToDB();
+            $dbc = DataBase::connectToDB();
 
             $sql = <<<SQL
                 UPDATE User
@@ -409,7 +420,7 @@
 
             $hashed = User::hashIt($newPassword);
 
-            User::SQL($dbc, $sql, "si", array($hashed, $this->userID), false, false);
+            DataBase::SQL($dbc, $sql, "si", array($hashed, $this->userID), false, false);
 
             mysqli_close($dbc);
         }
@@ -419,7 +430,7 @@
          */
         function ascend()
         {
-            $dbc = User::connectToDB();
+            $dbc = DataBase::connectToDB();
 
             $sql = <<<SQL
                 SELECT BogdanFloor.CostToAscendTo
@@ -427,18 +438,18 @@
                 WHERE User.ID = ? AND BogdanFloor.ID = User.BogdanFloorID + 1 AND User.Bogdinari >= BogdanFloor.CostToAscendTo
                 SQL;
 
-            $result = User::SQL($dbc, $sql, "i", array($this->userID), false, true);
+            $result = DataBase::SQL($dbc, $sql, "i", array($this->userID), false, true);
 
             if (count($result) > 0)
             {
                 $price = $result[0]["CostToAscendTo"];
                 $sql = <<<SQL
                     UPDATE User
-                    SET User.Bogdinari = User.Bogdinari - ?, User.BogdanFloorID = User.BogdanFloorID +1
-                    WHERE User.ID = ?
+                    SET User.Bogdinari = User.Bogdinari - ?, User.BogdanFloorID = User.BogdanFloorID + 1
+                    WHERE User.ID = ? AND EXISTS (SELECT * FROM BogdanFloor WHERE BogdanFloor.ID = User.BogdanFloorID + 1)  
                     SQL;
 
-                User::SQL($dbc, $sql, "ii", array($price, $this->userID), false, false);
+                DataBase::SQL($dbc, $sql, "ii", array($price, $this->userID), false, false);
 
                 mysqli_close($dbc);
 
@@ -456,7 +467,7 @@
          */
         function getVip()
         {
-            $dbc = User::connectToDB();
+            $dbc = DataBase::connectToDB();
 
             $sql = <<<SQL
                 SELECT User.VIPLevelID
@@ -465,7 +476,7 @@
                 SQL;
             
 
-            $retSql = User::SQL($dbc, $sql, "i", array($this->userID), false, true);
+            $retSql = DataBase::SQL($dbc, $sql, "i", array($this->userID), false, true);
 
             mysqli_close($dbc);
 
@@ -485,15 +496,15 @@
          */
         function getAllUserInfo()
         {
-            $dbc = User::connectToDB();
+            $dbc = DataBase::connectToDB();
 
             $sql = <<<SQL
                 SELECT User.Username, User.Email, User.Bogdinari, VIPLevel.Name AS VipName, b1.ID AS FloorNumber, b1.Name AS FloorName, b1.CostToStay AS CostToStay, b2.CostToAscendTo AS CostToNext
-                FROM User, VIPLevel, BogdanFloor b1, BogdanFloor b2
-                WHERE User.ID = ? AND User.VIPLevelID = VIPLevel.ID AND b1.ID = User.BogdanFloorID AND b2.ID = User.BogdanFloorID + 1
+                FROM User, BogdanFloor b1 LEFT JOIN BogdanFloor b2 ON(b2.ID = User.BogdanFloorID + 1) LEFT JOIN VIPLevel ON(User.VIPLevelID = VIPLevel.ID)
+                WHERE User.ID = ? AND b1.ID = User.BogdanFloorID
                 SQL;
             
-            $retSql = User::SQL($dbc, $sql, "i", array($this->userID), false, true);
+            $retSql = DataBase::SQL($dbc, $sql, "i", array($this->userID), false, true);
 
             mysqli_close($dbc);
 
@@ -517,7 +528,7 @@
                 $str .= $seed[random_int(0, count($seed) - 1)];
             }
 
-            $dbc = User::connectToDB();
+            $dbc = DataBase::connectToDB();
 
             $sql = <<<SQL
                 UPDATE User
@@ -525,7 +536,7 @@
                 WHERE User.ID = ?
                 SQL;
             
-            User::SQL($dbc, $sql, "si", array($str,$this->userID), false, false);
+            DataBase::SQL($dbc, $sql, "si", array($str,$this->userID), false, false);
 
             mysqli_close($dbc);
 

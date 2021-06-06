@@ -68,37 +68,40 @@ class VIPStatus extends React.Component {
           <div className="is-align-self-center">
             <button
               className={`button title is-3-5 is-info ${
-                this.state.loading === 1 ? "is-loading is-disabled" : ""
+                this.state.loading === 1 ? "is-loading" : ""
               }`}
               onClick={() => {
                 this.setState({ loading: 1 });
                 // eslint-disable-next-line no-undef
                 this.Buy(Stripe(process.env.stripe), 2, this);
               }}
+              disabled={this.state.loading !== 0 || this.state.error}
             >{`VIP Level 1`}</button>
           </div>
           <div className="is-align-self-center">
             <button
               className={`button title is-3-5 is-success ${
-                this.state.loading === 2 ? "is-loading is-disabled" : ""
+                this.state.loading === 2 ? "is-loading" : ""
               }`}
               onClick={() => {
                 this.setState({ loading: 2 });
                 // eslint-disable-next-line no-undef
                 this.Buy(Stripe(process.env.stripe), 3, this);
               }}
+              disabled={this.state.loading !== 0 || this.state.error}
             >{`VIP Level 2`}</button>
           </div>
           <div className="is-align-self-center">
             <button
               className={`button title is-3-5 is-danger ${
-                this.state.loading === 3 ? "is-loading is-disabled" : ""
+                this.state.loading === 3 ? "is-loading" : ""
               }`}
               onClick={() => {
                 this.setState({ loading: 3 });
                 // eslint-disable-next-line no-undef
                 this.Buy(Stripe(process.env.stripe), 4, this);
               }}
+              disabled={this.state.loading !== 0 || this.state.error}
             >{`VIP Level 3`}</button>
           </div>
           {this.state.error === true && (

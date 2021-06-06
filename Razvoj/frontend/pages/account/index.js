@@ -37,6 +37,7 @@ class Account extends React.Component {
       ascension: "",
       floor: "",
       level: "",
+      lastFloor: false,
     };
   }
 
@@ -104,6 +105,7 @@ class Account extends React.Component {
           ascension: `Ascend [${data.CostToNext}β]`,
           floor: `${data.FloorName}[${data.FloorNumber}]`,
           level: data.VipName,
+          lastFloor: data.CostToNext === null,
         });
 
         this.setState({ ascendLoading: false });
@@ -125,11 +127,16 @@ class Account extends React.Component {
         <br />
         <button
           className={`button is-primary ${
-            this.state.ascendLoading ? "is-loading is-disabled" : ""
+            this.state.ascendLoading ? "is-loading" : ""
           }`}
           onClick={() => this.Ascend()}
+          disabled={
+            this.state.lastFloor ||
+            this.state.ascendLoading ||
+            this.state.ascendError
+          }
         >
-          {this.state.ascension}
+          {!this.state.lastFloor ? this.state.ascension : "Last floor"}
         </button>
         {this.state.ascendError === true && (
           <div>

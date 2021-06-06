@@ -63,49 +63,53 @@ class Bogdinars extends React.Component {
           <div className="is-align-self-center">
             <button
               className={`button title is-3-5 is-info ${
-                this.state.loading === 1 ? "is-loading is-disabled" : ""
+                this.state.loading === 1 ? "is-loading" : ""
               }`}
               onClick={() => {
                 this.setState({ loading: 1 });
                 // eslint-disable-next-line no-undef
                 this.Buy(Stripe(process.env.stripe), 1000);
               }}
+              disabled={this.state.loading !== 0}
             >{`${1000}β`}</button>
           </div>
           <div className="is-align-self-center">
             <button
               className={`button title is-3-5 is-success ${
-                this.state.loading === 2 ? "is-loading is-disabled" : ""
+                this.state.loading === 2 ? "is-loading" : ""
               }`}
               onClick={() => {
                 this.setState({ loading: 2 });
                 // eslint-disable-next-line no-undef
                 this.Buy(Stripe(process.env.stripe), 5000);
               }}
+              disabled={this.state.loading !== 0}
             >{`${5000}β`}</button>
           </div>
           <div className="is-align-self-center">
             <button
               className={`button title is-3-5 is-warning ${
-                this.state.loading === 3 ? "is-loading is-disabled" : ""
+                this.state.loading === 3 ? "is-loading" : ""
               }`}
               onClick={() => {
                 this.setState({ loading: 3 });
                 // eslint-disable-next-line no-undef
                 this.Buy(Stripe(process.env.stripe), 10000);
               }}
+              disabled={this.state.loading !== 0}
             >{`${10000}β`}</button>
           </div>
           <div className="is-align-self-center">
             <button
               className={`button title is-3-5 is-danger ${
-                this.state.loading === 4 ? "is-loading is-disabled" : ""
+                this.state.loading === 4 ? "is-loading" : ""
               }`}
               onClick={() => {
                 this.setState({ loading: 4 });
                 // eslint-disable-next-line no-undef
                 this.Buy(Stripe(process.env.stripe), 50000);
               }}
+              disabled={this.state.loading !== 0}
             >{`${50000}β`}</button>
           </div>
         </div>

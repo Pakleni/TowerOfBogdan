@@ -113,7 +113,7 @@ function Register() {
                             id="email"
                             name="email"
                             ref={register({ required: true })}
-                            disabled={isSuccess !== null}
+                            disabled={isSuccess !== null || isLoading}
                           />
                         </div>
                       </div>
@@ -164,7 +164,7 @@ function Register() {
                             id="username"
                             name="username"
                             ref={register({ required: true })}
-                            disabled={isSuccess !== null}
+                            disabled={isSuccess !== null || isLoading}
                           />
                         </div>
                       </div>
@@ -194,7 +194,7 @@ function Register() {
                             id="password"
                             name="password"
                             ref={register({ required: true })}
-                            disabled={isSuccess !== null}
+                            disabled={isSuccess !== null || isLoading}
                           />
                         </div>
                       </div>
@@ -204,7 +204,7 @@ function Register() {
                             isLoading ? "is-loading" : null
                           }`}
                           type="submit"
-                          disabled={isSuccess !== null}
+                          disabled={isSuccess !== null || isLoading}
                           onClick={() => checkSubmitted()}
                         >
                           Submit

@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import NotLogged from "../../components/notlogged";
 
 function ChangePassword() {
-  const { changePass, handleSubmit } = useForm();
+  const { register, handleSubmit } = useForm();
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setSuccess] = useState(null);
 
@@ -89,7 +89,7 @@ function ChangePassword() {
                           type="text"
                           name="name"
                           style={{ display: "none" }}
-                          ref={changePass()}
+                          ref={register()}
                         />
                       </div>
                       <div className="field">
@@ -108,8 +108,8 @@ function ChangePassword() {
                             type="password"
                             id="password"
                             name="password"
-                            ref={changePass({ required: true })}
-                            disabled={isSuccess !== null}
+                            ref={register({ required: true })}
+                            disabled={isSuccess !== null || isLoading}
                           />
                         </div>
                       </div>
@@ -129,8 +129,8 @@ function ChangePassword() {
                             type="password"
                             id="new_password"
                             name="new_password"
-                            ref={changePass({ required: true })}
-                            disabled={isSuccess !== null}
+                            ref={register({ required: true })}
+                            disabled={isSuccess !== null || isLoading}
                           />
                         </div>
                       </div>
@@ -140,7 +140,7 @@ function ChangePassword() {
                             isLoading ? "is-loading" : null
                           }`}
                           type="submit"
-                          disabled={isSuccess !== null}
+                          disabled={isSuccess !== null || isLoading}
                           onClick={() => checkSubmitted()}
                         >
                           Submit

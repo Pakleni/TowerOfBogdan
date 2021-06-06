@@ -9,7 +9,6 @@ import PropTypes from "prop-types";
 
 import { library, config } from "@fortawesome/fontawesome-svg-core";
 
-// import { faSearch } from "@fortawesome/free-solid-svg-icons/faSearch";
 import { faTimes } from "@fortawesome/free-solid-svg-icons/faTimes";
 import { faUnlockAlt } from "@fortawesome/free-solid-svg-icons/faUnlockAlt";
 import { faUser } from "@fortawesome/free-solid-svg-icons/faUser";

@@ -1,0 +1,267 @@
+Running 'Bogdinari_Neispravno'
+23:42:10
+1.
+open on https://tower-of-bogdan.vercel.app/ OK
+23:42:10
+2.
+setWindowSize on 1936x1056 OK
+23:42:13
+3.
+click on css=.svg-inline--fa OK
+23:42:16
+4.
+click on css=.dropdown-item:nth-child(2) > b OK
+23:42:20
+5.
+click on name=loginform OK
+23:42:23
+6.
+click on id=email OK
+23:42:26
+7.
+type on id=email with value teferi@gmail.com OK
+23:42:29
+8.
+click on id=password OK
+23:42:32
+9.
+type on id=password with value teferi OK
+23:42:36
+10.
+click on name=loginform OK
+23:42:39
+11.
+click on css=.null OK
+23:42:42
+12.
+click on css=.button > span:nth-child(1) OK
+23:42:45
+13.
+mouseOver on css=.button > span:nth-child(1) OK
+23:42:48
+14.
+mouseOut on css=.button > span:nth-child(1) OK
+23:42:51
+15.
+click on linkText=Account Page OK
+23:42:55
+16.
+click on css=.media-right .is-warning OK
+23:42:58
+17.
+click on css=.is-warning OK
+23:43:01
+18.
+click on id=email OK
+23:43:04
+19.
+type on id=email with value jhgfdsadfghjk OK
+23:43:14
+20.
+mouseDownAt on css=.App with value 507,173.95001220703125 OK
+23:43:18
+21.
+mouseMoveAt on css=.App with value 507,173.95001220703125 OK
+23:43:20
+22.
+mouseUpAt on css=.App with value 507,173.95001220703125 OK
+23:43:23
+23.
+click on css=.App OK
+23:43:26
+24.
+type on id=cardNumber with value 1111 1111 1111 1111 OK
+23:43:29
+25.
+click on css=.SubmitButton-IconContainer OK
+23:43:33
+26.
+assertText on css=#email-fieldset > .FormFieldGroup-container > div:nth-child(2) with value Your email is incomplete. OK
+23:43:36
+27.
+assertText on css=#cardNumber-fieldset > div:nth-child(4) with value Your card number is invalid. OK
+23:43:39
+'Bogdinari_Neispravno' completed successfully
+23:43:40
+Running 'Bogdinari_Odustao'
+23:44:18
+1.
+open on https://tower-of-bogdan.vercel.app/ OK
+23:44:18
+2.
+setWindowSize on 1936x1056 OK
+23:44:21
+3.
+click on css=.button > span:nth-child(1) OK
+23:44:24
+4.
+click on css=.dropdown-item:nth-child(2) > b OK
+23:44:28
+5.
+click on id=email OK
+23:44:31
+6.
+type on id=email with value teferi@gmail.com OK
+23:44:34
+7.
+click on id=password OK
+23:44:37
+8.
+type on id=password with value teferi OK
+23:44:40
+9.
+click on css=.null OK
+23:44:43
+10.
+click on css=.button > span:nth-child(1) OK
+23:44:46
+11.
+click on css=.dropdown-item:nth-child(1) > b OK
+23:44:49
+12.
+click on css=.media-right .is-warning OK
+23:44:52
+13.
+click on css=.is-success OK
+23:44:55
+14.
+click on css=.Header-businessLink OK
+23:44:59
+15.
+assertText on css=.notification > .title:nth-child(1) with value Purchase cancelled :( OK
+23:45:09
+'Bogdinari_Odustao' completed successfully
+23:45:10
+Running 'Bogdinari_Prazno'
+23:45:46
+1.
+open on https://tower-of-bogdan.vercel.app/ OK
+23:45:46
+2.
+setWindowSize on 1936x1056 OK
+23:45:48
+3.
+click on css=.button > span:nth-child(1) OK
+23:45:51
+4.
+click on css=.dropdown-item:nth-child(2) > b OK
+23:46:03
+5.
+click on id=email OK
+23:46:07
+6.
+type on id=email with value teferi@gmail.com OK
+23:46:10
+7.
+click on id=password OK
+23:46:13
+8.
+type on id=password with value teferi OK
+23:46:16
+9.
+click on css=.null OK
+23:46:20
+10.
+click on css=.button > span:nth-child(1) OK
+23:46:24
+11.
+click on css=.dropdown-item:nth-child(1) > b OK
+23:46:28
+12.
+click on css=.media-right .is-warning OK
+23:46:31
+13.
+click on css=.is-success OK
+23:46:34
+14.
+click on css=.SubmitButton-IconContainer OK
+23:46:37
+15.
+assertText on id=required-email-fieldset with value REQUIRED OK
+23:46:45
+16.
+assertText on id=required-cardNumber-fieldset with value REQUIRED OK
+23:46:48
+17.
+assertText on id=required-billingName-fieldset with value REQUIRED OK
+23:46:51
+'Bogdinari_Prazno' completed successfully
+23:46:52
+Running 'Bogdinari_Uspesno'
+23:47:12
+1.
+open on https://tower-of-bogdan.vercel.app/ OK
+23:47:13
+2.
+setWindowSize on 1936x1056 OK
+23:47:16
+3.
+click on css=.button > span:nth-child(1) OK
+23:47:19
+4.
+click on css=.dropdown-item:nth-child(2) > b OK
+23:47:23
+5.
+click on id=email OK
+23:47:26
+6.
+type on id=email with value teferi@gmail.com OK
+23:47:29
+7.
+click on id=password OK
+23:47:32
+8.
+type on id=password with value teferi OK
+23:47:35
+9.
+click on css=.null OK
+23:47:38
+10.
+click on css=.button > span:nth-child(1) OK
+23:47:41
+11.
+click on css=.dropdown-item:nth-child(1) > b OK
+23:47:44
+12.
+click on css=.media-right .is-warning OK
+23:47:47
+13.
+click on css=.is-danger OK
+23:47:50
+14.
+click on id=email OK
+23:47:53
+15.
+type on id=email with value teferi@gmail.com OK
+23:48:02
+16.
+click on id=cardNumber OK
+23:48:06
+17.
+type on id=cardNumber with value 4242 4242 4242 4242 OK
+23:48:09
+18.
+click on id=cardExpiry OK
+23:48:13
+19.
+type on id=cardExpiry with value 04 / 24 OK
+23:48:15
+20.
+click on id=cardCvc OK
+23:48:19
+21.
+type on id=cardCvc with value 424 OK
+23:48:23
+22.
+click on id=billingName OK
+23:48:26
+23.
+type on id=billingName with value 424 OK
+23:48:30
+24.
+click on css=.SubmitButton-IconContainer OK
+23:48:33
+25.
+assertText on css=.notification > .title:nth-child(1) with value Purchase successfull! OK
+23:48:36
+'Bogdinari_Uspesno' completed successfully

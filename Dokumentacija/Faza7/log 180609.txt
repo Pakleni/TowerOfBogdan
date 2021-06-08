@@ -1,0 +1,395 @@
+Running 'Autorizacije Korisnika Uspesno'
+23:14:12
+1.
+open on https://tower-of-bogdan.vercel.app/ OK
+23:14:14
+2.
+setWindowSize on 1920x1040 OK
+23:14:14
+3.
+storeText on css=.button > span:nth-child(1) with value email OK
+23:14:14
+4.
+if on ${email} != 'Account' OK
+23:14:15
+7.
+end OK
+23:14:16
+8.
+click on css=.button > span:nth-child(1) OK
+23:14:17
+9.
+click on css=.dropdown-item:nth-child(2) > b OK
+23:14:18
+10.
+click on id=email OK
+23:14:19
+11.
+type on id=email with value mihailopacaric@gmail.com OK
+23:14:20
+12.
+type on id=password with value mikipace OK
+23:14:21
+13.
+click on css=.null OK
+23:14:22
+14.
+waitForText on css=.button > span:nth-child(1) with value mihailopacaric@gmail.com OK
+23:14:23
+15.
+assertText on css=.button > span:nth-child(1) with value mihailopacaric@gmail.com OK
+23:14:25
+'Autorizacije Korisnika Uspesno' completed successfully
+23:14:26
+Running 'Autorizacije Korisnika Neuspesno 1'
+23:14:26
+1.
+open on https://tower-of-bogdan.vercel.app/ OK
+23:14:27
+2.
+setWindowSize on 1920x1040 OK
+23:14:27
+3.
+storeText on css=.button > span:nth-child(1) with value email OK
+23:14:27
+4.
+if on ${email} != 'Account' OK
+23:14:28
+7.
+end OK
+23:14:29
+8.
+click on css=.button > span:nth-child(1) OK
+23:14:30
+9.
+click on css=.dropdown-item:nth-child(2) > b OK
+23:14:31
+10.
+click on id=email OK
+23:14:32
+11.
+click on css=.null OK
+23:14:33
+12.
+assertText on css=.field:nth-child(1) > .has-text-danger with value <- Required field OK
+23:14:34
+13.
+assertText on css=.field:nth-child(2) > .has-text-danger with value <- Required field OK
+23:14:35
+'Autorizacije Korisnika Neuspesno 1' completed successfully
+23:14:36
+Running 'Autorizacije Korisnika Neuspesno 2'
+23:14:36
+1.
+open on https://tower-of-bogdan.vercel.app/ OK
+23:14:37
+2.
+setWindowSize on 1920x1040 OK
+23:14:37
+3.
+storeText on css=.button > span:nth-child(1) with value email OK
+23:14:37
+4.
+if on ${email} != 'Account' OK
+23:14:38
+5.
+click on css=.button > span:nth-child(1) OK
+23:14:39
+6.
+click on css=.dropdown-item:nth-child(3) > b OK
+23:14:40
+7.
+end OK
+23:14:41
+8.
+click on css=.button > span:nth-child(1) OK
+23:14:42
+9.
+click on css=.dropdown-item:nth-child(2) > b OK
+23:14:43
+10.
+click on id=email OK
+23:14:44
+11.
+type on id=email with value test@test.test OK
+23:14:45
+12.
+click on id=password OK
+23:14:46
+13.
+type on id=password with value test OK
+23:14:47
+14.
+click on css=.null OK
+23:14:48
+15.
+assertText on css=.is-5 with value There was an error.\n\nPlease try again. OK
+23:14:49
+'Autorizacije Korisnika Neuspesno 2' completed successfully
+23:14:50
+Running 'Autorizacije Korisnika Neuspesno 3'
+23:14:50
+1.
+open on https://tower-of-bogdan.vercel.app/ OK
+23:14:51
+2.
+setWindowSize on 1920x1040 OK
+23:14:51
+3.
+storeText on css=.button > span:nth-child(1) with value email OK
+23:14:51
+4.
+if on ${email} != 'Account' OK
+23:14:52
+7.
+end OK
+23:14:53
+8.
+click on css=.button > span:nth-child(1) OK
+23:14:54
+9.
+click on css=.dropdown-item:nth-child(2) > b OK
+23:14:55
+10.
+click on id=email OK
+23:14:56
+11.
+type on id=email with value test OK
+23:14:57
+12.
+click on css=.is-parent OK
+23:14:58
+13.
+click on css=.field:nth-child(2) OK
+23:14:59
+14.
+click on id=password OK
+23:15:00
+15.
+type on id=password with value test OK
+23:15:01
+16.
+click on css=.null OK
+23:15:02
+17.
+assertText on css=.button > span:nth-child(1) with value Account OK
+23:15:03
+'Autorizacije Korisnika Neuspesno 3' completed successfully
+23:15:04
+Running 'Prikazivanja Rang-Liste'
+23:15:04
+1.
+open on https://tower-of-bogdan.vercel.app/ OK
+23:15:05
+2.
+setWindowSize on 1920x1040 OK
+23:15:05
+3.
+click on css=.navbar-end .title OK
+23:15:05
+4.
+click on css=.is-1 OK
+23:15:06
+5.
+click on css=.column:nth-child(2) > ul OK
+23:15:07
+6.
+assertText on css=thead th:nth-child(1) with value Pos OK
+23:15:08
+7.
+assertText on css=th:nth-child(2) with value Username OK
+23:15:08
+8.
+assertText on css=thead .has-text-right with value Floor reached OK
+23:15:08
+'Prikazivanja Rang-Liste' completed successfully
+23:15:08
+Running 'Registracije Korisnika Neuspesno 1'
+23:15:08
+1.
+open on https://tower-of-bogdan.vercel.app/ OK
+23:15:09
+2.
+setWindowSize on 1920x1040 OK
+23:15:09
+3.
+storeText on css=.button > span:nth-child(1) with value email OK
+23:15:09
+4.
+if on ${email} != 'Account' OK
+23:15:09
+7.
+end OK
+23:15:10
+8.
+click on css=.button > span:nth-child(1) OK
+23:15:10
+9.
+click on linkText=Sign Up OK
+23:15:10
+10.
+click on id=email OK
+23:15:10
+11.
+click on css=.null OK
+23:15:10
+12.
+mouseOver on css=.null OK
+23:15:10
+13.
+mouseOut on css=.null OK
+23:15:10
+14.
+assertText on css=.field:nth-child(1) > .has-text-danger with value <- Required field OK
+23:15:11
+15.
+assertText on css=.field:nth-child(3) > .has-text-danger with value <- Required field OK
+23:15:11
+16.
+assertText on css=.field:nth-child(4) > .has-text-danger with value <- Required field OK
+23:15:11
+'Registracije Korisnika Neuspesno 1' completed successfully
+23:15:11
+Running 'Registracije Korisnika Neuspesno 2'
+23:15:11
+1.
+open on https://tower-of-bogdan.vercel.app/ OK
+23:15:12
+2.
+setWindowSize on 1920x1040 OK
+23:15:12
+3.
+storeText on css=.button > span:nth-child(1) with value email OK
+23:15:12
+4.
+if on ${email} != 'Account' OK
+23:15:12
+7.
+end OK
+23:15:12
+8.
+click on css=.button > span:nth-child(1) OK
+23:15:12
+9.
+click on css=.dropdown-item:nth-child(1) > b OK
+23:15:13
+10.
+click on id=email OK
+23:15:13
+11.
+type on id=email with value pacaric OK
+23:15:13
+12.
+click on id=username OK
+23:15:13
+13.
+type on id=username with value pacaric OK
+23:15:13
+14.
+click on id=password OK
+23:15:13
+15.
+type on id=password with value pacaric OK
+23:15:13
+16.
+assertElementPresent on css=.is-parent OK
+23:15:14
+'Registracije Korisnika Neuspesno 2' completed successfully
+23:15:14
+Running 'Registracije Korisnika Uspesno'
+23:15:14
+1.
+open on https://tower-of-bogdan.vercel.app/ OK
+23:15:14
+2.
+setWindowSize on 1920x1040 OK
+23:15:14
+3.
+storeText on css=.button > span:nth-child(1) with value email OK
+23:15:14
+4.
+if on ${email} != 'Account' OK
+23:15:15
+7.
+end OK
+23:15:15
+8.
+click on css=.button > span:nth-child(1) OK
+23:15:15
+9.
+click on linkText=Sign Up OK
+23:15:15
+10.
+click on id=email OK
+23:15:15
+11.
+type on id=email with value pacaric@gmail.com OK
+23:15:16
+12.
+click on id=username OK
+23:15:16
+13.
+type on id=username with value testUser OK
+23:15:16
+14.
+click on id=password OK
+23:15:16
+15.
+type on id=password with value test OK
+23:15:16
+16.
+click on css=.null OK
+23:15:16
+17.
+waitForText on css=.is-5 with value Registration successfull\n\nSuccess! OK
+23:15:16
+18.
+assertText on css=.is-5 with value Registration successfull\n\nSuccess! OK
+23:15:18
+'Registracije Korisnika Uspesno' completed successfully
+23:15:18
+Running 'Registracije Korisnika Neuspesno 3'
+23:15:19
+1.
+open on https://tower-of-bogdan.vercel.app/ OK
+23:15:19
+2.
+setWindowSize on 1920x1040 OK
+23:15:19
+3.
+storeText on css=.button > span:nth-child(1) with value email OK
+23:15:19
+4.
+if on ${email} != 'Account' OK
+23:15:20
+7.
+end OK
+23:15:20
+8.
+click on css=.button > span:nth-child(1) OK
+23:15:20
+9.
+click on css=.dropdown-item:nth-child(1) > b OK
+23:15:20
+10.
+click on id=email OK
+23:15:20
+11.
+type on id=email with value pacaric@gmail.com OK
+23:15:20
+12.
+type on id=username with value testUser OK
+23:15:21
+13.
+type on id=password with value test OK
+23:15:21
+14.
+click on css=.null OK
+23:15:21
+15.
+waitForText on css=.notification > p with value Email already taken. OK
+23:15:21
+16.
+assertText on css=.notification > p with value Email already taken. OK
+23:15:21
+'Registracije Korisnika Neuspesno 3' completed successfully

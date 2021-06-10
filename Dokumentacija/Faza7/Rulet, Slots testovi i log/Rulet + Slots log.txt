@@ -1,0 +1,240 @@
+Running 'Rulet_Korisnik je uneo nevažeći ulog'
+21:09:32
+1.
+open on / OK
+21:09:32
+2.
+setWindowSize on 1936x1056 OK
+21:09:34
+3.
+click on css=.button OK
+21:09:36
+4.
+click on linkText=Login OK
+21:09:38
+5.
+click on id=email OK
+21:09:40
+6.
+type on id=email with value test@test.com OK
+21:09:42
+7.
+type on id=password with value test OK
+21:09:44
+8.
+sendKeys on id=password with value ${KEY_ENTER} OK
+21:09:46
+9.
+click on css=.navbar-item:nth-child(3) > .title OK
+21:09:48
+10.
+selectFrame on index=0 OK
+21:09:50
+11.
+click on css=.gameInput OK
+21:09:53
+12.
+click on css=canvas OK
+21:09:55
+13.
+type on css=.gameInput with value -1 OK
+21:09:57
+14.
+selectFrame on relative=parent OK
+21:09:59
+15.
+click on css=.button > span:nth-child(1) OK
+21:10:01
+16.
+mouseOver on linkText=Account Page OK
+21:10:03
+17.
+click on linkText=Log out OK
+21:10:05
+18.
+assertText on css=.is-1:nth-child(1) with value You are not logged in. OK
+21:10:07
+'Rulet_Korisnik je uneo nevažeći ulog' completed successfully
+21:10:07
+Running 'Rulet_Korisnik uspešno igra igru'
+21:10:07
+1.
+open on / OK
+21:10:08
+2.
+setWindowSize on 1936x1056 OK
+21:10:10
+3.
+click on css=.button > span:nth-child(1) OK
+21:10:12
+4.
+click on linkText=Login OK
+21:10:14
+5.
+click on css=.field:nth-child(1) OK
+21:10:16
+6.
+click on id=email OK
+21:10:18
+7.
+type on id=email with value test@test.com OK
+21:10:20
+8.
+type on id=password with value test OK
+21:10:22
+9.
+sendKeys on id=password with value ${KEY_ENTER} OK
+21:10:24
+10.
+click on css=.navbar-item:nth-child(3) > .title OK
+21:10:26
+11.
+selectFrame on index=0 OK
+21:10:28
+12.
+click on css=.gameInput OK
+21:10:31
+13.
+click on css=canvas OK
+21:10:33
+14.
+click on css=canvas OK
+21:10:35
+15.
+click on css=canvas OK
+21:10:37
+16.
+type on css=.gameInput with value 1 OK
+21:10:39
+17.
+selectFrame on relative=parent OK
+21:10:41
+18.
+click on css=.button > span:nth-child(1) OK
+21:10:43
+19.
+mouseOver on css=.dropdown-item:nth-child(1) > b OK
+21:10:45
+20.
+click on css=.dropdown-item:nth-child(3) > b OK
+21:10:47
+21.
+assertText on css=.is-1:nth-child(1) with value You are not logged in. OK
+21:10:49
+'Rulet_Korisnik uspešno igra igru' completed successfully
+21:10:50
+Running 'Slots_Korisnik je uneo nevažeći ulog'
+21:10:50
+1.
+open on / OK
+21:10:50
+2.
+setWindowSize on 1936x1056 OK
+21:10:52
+3.
+click on css=.button OK
+21:10:54
+4.
+click on css=.dropdown-item:nth-child(2) > b OK
+21:10:56
+5.
+click on id=email OK
+21:10:58
+6.
+type on id=email with value test@test.com OK
+21:11:00
+7.
+type on id=password with value test OK
+21:11:02
+8.
+sendKeys on id=password with value ${KEY_ENTER} OK
+21:11:04
+9.
+click on linkText=Slots OK
+21:11:07
+10.
+selectFrame on index=0 OK
+21:11:09
+11.
+click on css=.gameInput OK
+21:11:11
+12.
+click on css=canvas OK
+21:11:13
+13.
+type on css=.gameInput with value -1 OK
+21:11:15
+14.
+selectFrame on relative=parent OK
+21:11:17
+15.
+click on css=.dropdown-trigger > .button OK
+21:11:19
+16.
+mouseOver on css=.dropdown-item:nth-child(1) > b OK
+21:11:21
+17.
+click on linkText=Log out OK
+21:11:23
+18.
+assertText on css=.is-1:nth-child(1) with value You are not logged in. OK
+21:11:26
+'Slots_Korisnik je uneo nevažeći ulog' completed successfully
+21:11:26
+Running 'Slots__Korisnik uspešno igra igru'
+21:11:26
+1.
+open on / OK
+21:11:26
+2.
+setWindowSize on 1936x1056 OK
+21:11:28
+3.
+click on css=.button OK
+21:11:30
+4.
+click on css=.dropdown-item:nth-child(2) > b OK
+21:11:32
+5.
+click on id=email OK
+21:11:34
+6.
+type on id=email with value test@test.com OK
+21:11:36
+7.
+type on id=password with value test OK
+21:11:38
+8.
+sendKeys on id=password with value ${KEY_ENTER} OK
+21:11:40
+9.
+click on linkText=Slots OK
+21:11:43
+10.
+selectFrame on index=0 OK
+21:11:45
+11.
+click on css=.gameInput OK
+21:11:47
+12.
+click on css=canvas OK
+21:11:49
+13.
+type on css=.gameInput with value 1 OK
+21:11:51
+14.
+selectFrame on relative=parent OK
+21:11:53
+15.
+click on css=.dropdown-trigger > .button OK
+21:11:56
+16.
+mouseOver on css=.dropdown-item:nth-child(1) > b OK
+21:11:58
+17.
+click on linkText=Log out OK
+21:12:00
+18.
+assertText on css=.is-1:nth-child(1) with value You are not logged in. OK
+21:12:02
+'Slots__Korisnik uspešno igra igru' completed successfully
